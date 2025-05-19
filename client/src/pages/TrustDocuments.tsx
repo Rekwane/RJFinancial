@@ -325,7 +325,7 @@ export default function TrustDocuments() {
                 </Card>
               </div>
               
-              <div className="bg-gray-50 p-4 rounded-md">
+              <div className="bg-gray-50 p-4 rounded-md mb-6">
                 <h4 className="font-medium text-lg mb-2">Legal Concepts Central to Traffic Remedies</h4>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
@@ -357,6 +357,130 @@ export default function TrustDocuments() {
                   </div>
                 </div>
               </div>
+
+              <h3 className="text-lg font-medium mb-3">Document Templates</h3>
+              <p className="text-gray-700 mb-4">
+                The following document templates can be used as part of your traffic ticket remedy strategy. Select a template to view and customize it for your specific situation.
+              </p>
+
+              {trafficTemplateType ? (
+                <div>
+                  <div className="flex justify-between items-center mb-4">
+                    <h3 className="text-lg font-medium">
+                      {trafficTemplateType === 'right-of-rescission' && 'Right of Rescission Notice'}
+                      {trafficTemplateType === 'debt-validation' && 'Debt Validation Letter'}
+                      {trafficTemplateType === 'notice-of-status' && 'Notice of Status and Standing'}
+                      {trafficTemplateType === 'quo-warranto' && 'Quo Warranto Challenge'}
+                      {trafficTemplateType === 'abatement' && 'Notice of Abatement'}
+                    </h3>
+                    <Button variant="outline" onClick={() => setTrafficTemplateType(null)}>
+                      Back to Templates
+                    </Button>
+                  </div>
+                  <Card className="border border-gray-200">
+                    <CardContent className="p-4">
+                      <div className="bg-gray-50 p-4 rounded mb-4 font-mono text-sm whitespace-pre-wrap">
+                        {getTrafficRemedyTemplate(trafficTemplateType)}
+                      </div>
+                      <div className="flex justify-between mt-4">
+                        <Button variant="outline" onClick={() => setTrafficTemplateType(null)}>
+                          Cancel
+                        </Button>
+                        <Button>
+                          Download Template
+                        </Button>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <Card className="border border-gray-200 hover:border-primary hover:shadow-md transition-all">
+                    <CardHeader className="pb-2">
+                      <CardTitle className="text-md">Right of Rescission Notice</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <p className="text-sm text-gray-600 mb-4">
+                        Use this template to rescind your signature on a traffic ticket within the 3-day rescission period. Establishes that the contract was signed under duress or without full disclosure.
+                      </p>
+                      <Button 
+                        className="w-full" 
+                        onClick={() => setTrafficTemplateType('right-of-rescission')}
+                      >
+                        View Template
+                      </Button>
+                    </CardContent>
+                  </Card>
+                  
+                  <Card className="border border-gray-200 hover:border-primary hover:shadow-md transition-all">
+                    <CardHeader className="pb-2">
+                      <CardTitle className="text-md">Debt Validation Letter</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <p className="text-sm text-gray-600 mb-4">
+                        Based on the Fair Debt Collection Practices Act (15 USC 1692g), this letter demands verification of the alleged debt (traffic fine) before payment can be required.
+                      </p>
+                      <Button 
+                        className="w-full"
+                        onClick={() => setTrafficTemplateType('debt-validation')}
+                      >
+                        View Template
+                      </Button>
+                    </CardContent>
+                  </Card>
+                  
+                  <Card className="border border-gray-200 hover:border-primary hover:shadow-md transition-all">
+                    <CardHeader className="pb-2">
+                      <CardTitle className="text-md">Notice of Status and Standing</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <p className="text-sm text-gray-600 mb-4">
+                        Formally establishes your status as distinct from the legal fiction, clarifies your standing, and challenges the presumption of jurisdiction by the court.
+                      </p>
+                      <Button 
+                        className="w-full"
+                        onClick={() => setTrafficTemplateType('notice-of-status')}
+                      >
+                        View Template
+                      </Button>
+                    </CardContent>
+                  </Card>
+                  
+                  <Card className="border border-gray-200 hover:border-primary hover:shadow-md transition-all">
+                    <CardHeader className="pb-2">
+                      <CardTitle className="text-md">Quo Warranto Challenge</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <p className="text-sm text-gray-600 mb-4">
+                        Formally challenges the authority and jurisdiction of the court or agency by requiring them to prove their lawful authority to proceed against you.
+                      </p>
+                      <Button 
+                        className="w-full"
+                        onClick={() => setTrafficTemplateType('quo-warranto')}
+                      >
+                        View Template
+                      </Button>
+                    </CardContent>
+                  </Card>
+                  
+                  <Card className="border border-gray-200 hover:border-primary hover:shadow-md transition-all">
+                    <CardHeader className="pb-2">
+                      <CardTitle className="text-md">Notice of Abatement</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <p className="text-sm text-gray-600 mb-4">
+                        Requests suspension of proceedings due to procedural errors, jurisdictional defects, or other irregularities in the process that warrant abatement.
+                      </p>
+                      <Button 
+                        className="w-full"
+                        onClick={() => setTrafficTemplateType('abatement')}
+                      >
+                        View Template
+                      </Button>
+                    </CardContent>
+                  </Card>
+                </div>
+              )}
             </CardContent>
           </Card>
         </TabsContent>
