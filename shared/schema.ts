@@ -1,4 +1,4 @@
-import { pgTable, text, serial, integer, timestamp, boolean, jsonb } from "drizzle-orm/pg-core";
+import { pgTable, text, serial, integer, timestamp, boolean, jsonb, primaryKey, varchar } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
@@ -153,6 +153,101 @@ export const insertNewsSchema = createInsertSchema(news).omit({
   publishDate: true,
 });
 
+// User roles (staff/client)
+export const userRoles = pgTable("user_roles", {
+  id: serial("id").primaryKey(),
+  userId: integer("user_id").notNull(),
+  role: text("role").notNull(), // "client", "worker", "admin"
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+export const insertUserRoleSchema = createInsertSchema(userRoles).omit({
+  id: true,
+  createdAt: true,
+});
+
+// Service types
+export const serviceTypes = pgTable("service_types", {
+  id: serial("id").primaryKey(),
+  name: text("name").notNull().unique(),
+  description: text("description").notNull(),
+  estimatedTimeInDays: integer("estimated_time_in_days").notNull(),
+  active: boolean("active").default(true),
+});
+
+export const insertServiceTypeSchema = createInsertSchema(serviceTypes).omit({
+  id: true,
+});
+
+// Client service requests
+export const serviceRequests = pgTable("service_requests", {
+  id: serial("id").primaryKey(),
+  clientId: integer("client_id").notNull(), // References users.id
+  serviceTypeId: integer("service_type_id").notNull(), // References service_types.id
+  status: text("status").notNull(), // "pending", "assigned", "in_progress", "completed", "cancelled"
+  notes: text("notes"),
+  requestDate: timestamp("request_date").defaultNow(),
+  desiredCompletionDate: timestamp("desired_completion_date"),
+  actualCompletionDate: timestamp("actual_completion_date"),
+  priority: text("priority").default("normal"), // "low", "normal", "high", "urgent"
+});
+
+export const insertServiceRequestSchema = createInsertSchema(serviceRequests).omit({
+  id: true,
+  requestDate: true,
+  actualCompletionDate: true,
+});
+
+// Task assignments for workers
+export const taskAssignments = pgTable("task_assignments", {
+  id: serial("id").primaryKey(),
+  serviceRequestId: integer("service_request_id").notNull(), // References service_requests.id
+  workerId: integer("worker_id").notNull(), // References users.id (with worker role)
+  assignedDate: timestamp("assigned_date").defaultNow(),
+  dueDate: timestamp("due_date"),
+  completedDate: timestamp("completed_date"),
+  status: text("status").notNull(), // "assigned", "in_progress", "on_hold", "completed", "cancelled"
+  notes: text("notes"),
+  timeSpentInMinutes: integer("time_spent_in_minutes").default(0),
+});
+
+export const insertTaskAssignmentSchema = createInsertSchema(taskAssignments).omit({
+  id: true,
+  assignedDate: true,
+  completedDate: true,
+});
+
+// Progress updates for service requests
+export const progressUpdates = pgTable("progress_updates", {
+  id: serial("id").primaryKey(),
+  taskAssignmentId: integer("task_assignment_id").notNull(), // References task_assignments.id
+  updateDate: timestamp("update_date").defaultNow(),
+  percentComplete: integer("percent_complete").notNull(),
+  description: text("description").notNull(),
+  createdBy: integer("created_by").notNull(), // References users.id
+  attachmentPath: text("attachment_path"),
+});
+
+export const insertProgressUpdateSchema = createInsertSchema(progressUpdates).omit({
+  id: true,
+  updateDate: true,
+});
+
+// Comments on service requests
+export const serviceComments = pgTable("service_comments", {
+  id: serial("id").primaryKey(),
+  serviceRequestId: integer("service_request_id").notNull(), // References service_requests.id
+  userId: integer("user_id").notNull(), // References users.id
+  comment: text("comment").notNull(),
+  createdAt: timestamp("created_at").defaultNow(),
+  isInternal: boolean("is_internal").default(false), // If true, only visible to workers
+});
+
+export const insertServiceCommentSchema = createInsertSchema(serviceComments).omit({
+  id: true,
+  createdAt: true,
+});
+
 // Export types
 export type User = typeof users.$inferSelect;
 export type InsertUser = z.infer<typeof insertUserSchema>;
@@ -180,3 +275,21 @@ export type InsertStock = z.infer<typeof insertStockSchema>;
 
 export type News = typeof news.$inferSelect;
 export type InsertNews = z.infer<typeof insertNewsSchema>;
+
+export type UserRole = typeof userRoles.$inferSelect;
+export type InsertUserRole = z.infer<typeof insertUserRoleSchema>;
+
+export type ServiceType = typeof serviceTypes.$inferSelect;
+export type InsertServiceType = z.infer<typeof insertServiceTypeSchema>;
+
+export type ServiceRequest = typeof serviceRequests.$inferSelect;
+export type InsertServiceRequest = z.infer<typeof insertServiceRequestSchema>;
+
+export type TaskAssignment = typeof taskAssignments.$inferSelect;
+export type InsertTaskAssignment = z.infer<typeof insertTaskAssignmentSchema>;
+
+export type ProgressUpdate = typeof progressUpdates.$inferSelect;
+export type InsertProgressUpdate = z.infer<typeof insertProgressUpdateSchema>;
+
+export type ServiceComment = typeof serviceComments.$inferSelect;
+export type InsertServiceComment = z.infer<typeof insertServiceCommentSchema>;

@@ -10,14 +10,49 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
+  FormDescription,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Checkbox } from "@/components/ui/checkbox";
 import { useToast } from "@/hooks/use-toast";
 import { Link, useLocation } from "wouter";
 import { Shield, AlertCircle } from "lucide-react";
 import { apiRequest } from "@/lib/queryClient";
+
+const SERVICES = [
+  {
+    id: "credit-restoration",
+    label: "Credit Restoration",
+    description: "Dispute inaccuracies on your credit report using UCC Articles 8 & 9"
+  },
+  {
+    id: "trust-creation",
+    label: "Trust Creation & Asset Protection",
+    description: "Create legal trust entities to protect your assets"
+  },
+  {
+    id: "business-formation",
+    label: "Fully Structured Business Formation",
+    description: "Establish a properly structured business entity with all required documentation"
+  },
+  {
+    id: "funding",
+    label: "Funding",
+    description: "Access capital and financing options for your business or personal needs"
+  },
+  {
+    id: "estate-administration",
+    label: "Estate Administration",
+    description: "Comprehensive estate planning and administration services"
+  },
+  {
+    id: "vip-service",
+    label: "VIP Service",
+    description: "Premium all-inclusive service package with dedicated support"
+  },
+];
 
 const registerSchema = z.object({
   username: z.string().min(3, {
@@ -33,6 +68,12 @@ const registerSchema = z.object({
     message: "Password must be at least 8 characters.",
   }),
   confirmPassword: z.string(),
+  services: z.array(z.string()).min(1, {
+    message: "Please select at least one service."
+  }),
+  agreeToTerms: z.boolean().refine(val => val === true, {
+    message: "You must agree to the terms and conditions."
+  })
 }).refine((data) => data.password === data.confirmPassword, {
   message: "Passwords don't match",
   path: ["confirmPassword"],
@@ -54,6 +95,8 @@ export default function Register() {
       fullName: "",
       password: "",
       confirmPassword: "",
+      services: [],
+      agreeToTerms: false
     },
   });
 
@@ -190,7 +233,76 @@ export default function Register() {
                   )}
                 />
                 
-                <Button type="submit" className="w-full" disabled={isLoading}>
+                <div className="space-y-4 mt-6">
+                  <div className="border rounded-lg p-4 bg-gray-50">
+                    <h3 className="font-medium text-lg mb-2">Select Services</h3>
+                    <p className="text-sm text-gray-600 mb-3">
+                      Select the services you're interested in. Your selections will be automatically assigned to our staff.
+                    </p>
+                    
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                      {SERVICES.map((service) => (
+                        <FormField
+                          key={service.id}
+                          control={form.control}
+                          name="services"
+                          render={({ field }) => (
+                            <FormItem
+                              key={service.id}
+                              className="flex flex-row items-start space-x-3 space-y-0 rounded-md border p-3"
+                            >
+                              <FormControl>
+                                <Checkbox
+                                  checked={field.value?.includes(service.id)}
+                                  onCheckedChange={(checked) => {
+                                    const value = field.value || [];
+                                    return checked
+                                      ? field.onChange([...value, service.id])
+                                      : field.onChange(
+                                          value.filter((val) => val !== service.id)
+                                        );
+                                  }}
+                                />
+                              </FormControl>
+                              <div className="space-y-1 leading-none">
+                                <FormLabel className="font-semibold">{service.label}</FormLabel>
+                                <FormDescription className="text-xs">
+                                  {service.description}
+                                </FormDescription>
+                              </div>
+                            </FormItem>
+                          )}
+                        />
+                      ))}
+                    </div>
+                    <FormMessage className="mt-2" />
+                  </div>
+                  
+                  <FormField
+                    control={form.control}
+                    name="agreeToTerms"
+                    render={({ field }) => (
+                      <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+                        <FormControl>
+                          <Checkbox
+                            checked={field.value}
+                            onCheckedChange={field.onChange}
+                          />
+                        </FormControl>
+                        <div className="space-y-1 leading-none">
+                          <FormLabel>
+                            I agree to the Terms of Service and Privacy Policy
+                          </FormLabel>
+                          <FormDescription>
+                            By selecting this box, you agree to our <Link href="/terms"><a className="text-primary hover:underline">Terms of Service</a></Link> and <Link href="/privacy"><a className="text-primary hover:underline">Privacy Policy</a></Link>.
+                          </FormDescription>
+                        </div>
+                      </FormItem>
+                    )}
+                  />
+                </div>
+
+                <Button type="submit" className="w-full mt-6" disabled={isLoading}>
                   {isLoading ? "Creating Account..." : "Register"}
                 </Button>
               </form>
