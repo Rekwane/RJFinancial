@@ -113,7 +113,7 @@ export function TrustForm({ onSuccess, onPreview }: TrustFormProps) {
           : undefined,
       };
       
-      return apiRequest("POST", "/api/trust-documents", apiData);
+      return apiRequest("/api/trust-documents", "POST", apiData);
     },
     onSuccess: async () => {
       toast({
