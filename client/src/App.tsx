@@ -15,6 +15,7 @@ import StockInvestment from "@/pages/StockInvestment";
 import Documents from "@/pages/Documents";
 import FinancialNews from "@/pages/FinancialNews";
 import NotificationsPage from "@/pages/NotificationsPage";
+import DisputeLettersPage from "@/pages/DisputeLettersPage";
 import { Header } from "@/components/layout/Header";
 import { Sidebar } from "@/components/layout/Sidebar";
 import { useState, useEffect } from "react";
@@ -36,7 +37,7 @@ function Router() {
             <Route path="/login" component={Login} />
             <Route path="/register" component={Register} />
             <Route path="/credit-repair" component={CreditRepair} />
-            <Route path="/dispute-letters" component={CreditRepair} />
+            <Route path="/dispute-letters" component={DisputeLettersPage} />
             <Route path="/credit-tips" component={CreditRepair} />
             <Route path="/trust" component={TrustDocuments} />
             <Route path="/traffic-tickets" component={TrafficTicketRemedies} />

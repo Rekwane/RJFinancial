@@ -421,11 +421,11 @@ export function EINForm({ onSuccess }: EINFormProps) {
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    <SelectItem value="Trust">Trust</SelectItem>
-                    <SelectItem value="LLC">Limited Liability Company (LLC)</SelectItem>
-                    <SelectItem value="Corporation">Corporation</SelectItem>
-                    <SelectItem value="Partnership">Partnership</SelectItem>
-                    <SelectItem value="SoleProprietor">Sole Proprietor</SelectItem>
+                    <SelectItem value="trust">Trust</SelectItem>
+                    <SelectItem value="llc">Limited Liability Company (LLC)</SelectItem>
+                    <SelectItem value="corporation">Corporation</SelectItem>
+                    <SelectItem value="partnership">Partnership</SelectItem>
+                    <SelectItem value="sole-proprietor">Sole Proprietor</SelectItem>
                   </SelectContent>
                 </Select>
                 <FormDescription>
@@ -449,19 +449,19 @@ export function EINForm({ onSuccess }: EINFormProps) {
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    <SelectItem value="Estate">Estate</SelectItem>
-                    <SelectItem value="Trust">Trust</SelectItem>
-                    <SelectItem value="Corporation">Corporation</SelectItem>
-                    <SelectItem value="S Corporation">S Corporation</SelectItem>
-                    <SelectItem value="Partnership">Partnership</SelectItem>
-                    <SelectItem value="LLC">Limited Liability Company</SelectItem>
-                    <SelectItem value="Sole Proprietor">Sole Proprietor</SelectItem>
-                    <SelectItem value="Personal Service Corporation">Personal Service Corporation</SelectItem>
-                    <SelectItem value="Church or Church-Controlled Organization">Church Organization</SelectItem>
-                    <SelectItem value="Other Nonprofit Organization">Other Nonprofit Organization</SelectItem>
-                    <SelectItem value="Farmers' Cooperative">Farmers' Cooperative</SelectItem>
-                    <SelectItem value="REMIC">REMIC</SelectItem>
-                    <SelectItem value="Other">Other</SelectItem>
+                    <SelectItem value="estate">Estate</SelectItem>
+                    <SelectItem value="trust">Trust</SelectItem>
+                    <SelectItem value="corporation">Corporation</SelectItem>
+                    <SelectItem value="s-corporation">S Corporation</SelectItem>
+                    <SelectItem value="partnership">Partnership</SelectItem>
+                    <SelectItem value="llc">Limited Liability Company</SelectItem>
+                    <SelectItem value="sole-proprietor">Sole Proprietor</SelectItem>
+                    <SelectItem value="personal-service-corp">Personal Service Corporation</SelectItem>
+                    <SelectItem value="church-organization">Church Organization</SelectItem>
+                    <SelectItem value="nonprofit">Other Nonprofit Organization</SelectItem>
+                    <SelectItem value="farmers-cooperative">Farmers' Cooperative</SelectItem>
+                    <SelectItem value="remic">REMIC</SelectItem>
+                    <SelectItem value="other">Other</SelectItem>
                   </SelectContent>
                 </Select>
                 <FormDescription>
@@ -485,13 +485,13 @@ export function EINForm({ onSuccess }: EINFormProps) {
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    <SelectItem value="Started new business">Started new business</SelectItem>
-                    <SelectItem value="Banking purpose">Banking purpose</SelectItem>
-                    <SelectItem value="Hired employees">Hired employees</SelectItem>
-                    <SelectItem value="Created a trust">Created a trust</SelectItem>
-                    <SelectItem value="Created a pension plan">Created a pension plan</SelectItem>
-                    <SelectItem value="Compliance with IRS withholding regulations">Compliance with IRS withholding</SelectItem>
-                    <SelectItem value="Other">Other</SelectItem>
+                    <SelectItem value="new-business">Started new business</SelectItem>
+                    <SelectItem value="banking-purpose">Banking purpose</SelectItem>
+                    <SelectItem value="hired-employees">Hired employees</SelectItem>
+                    <SelectItem value="created-trust">Created a trust</SelectItem>
+                    <SelectItem value="pension-plan">Created a pension plan</SelectItem>
+                    <SelectItem value="irs-withholding">Compliance with IRS withholding</SelectItem>
+                    <SelectItem value="other">Other</SelectItem>
                   </SelectContent>
                 </Select>
                 <FormDescription>
@@ -533,18 +533,18 @@ export function EINForm({ onSuccess }: EINFormProps) {
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      <SelectItem value="January">January</SelectItem>
-                      <SelectItem value="February">February</SelectItem>
-                      <SelectItem value="March">March</SelectItem>
-                      <SelectItem value="April">April</SelectItem>
-                      <SelectItem value="May">May</SelectItem>
-                      <SelectItem value="June">June</SelectItem>
-                      <SelectItem value="July">July</SelectItem>
-                      <SelectItem value="August">August</SelectItem>
-                      <SelectItem value="September">September</SelectItem>
-                      <SelectItem value="October">October</SelectItem>
-                      <SelectItem value="November">November</SelectItem>
-                      <SelectItem value="December">December</SelectItem>
+                      <SelectItem value="january">January</SelectItem>
+                      <SelectItem value="february">February</SelectItem>
+                      <SelectItem value="march">March</SelectItem>
+                      <SelectItem value="april">April</SelectItem>
+                      <SelectItem value="may">May</SelectItem>
+                      <SelectItem value="june">June</SelectItem>
+                      <SelectItem value="july">July</SelectItem>
+                      <SelectItem value="august">August</SelectItem>
+                      <SelectItem value="september">September</SelectItem>
+                      <SelectItem value="october">October</SelectItem>
+                      <SelectItem value="november">November</SelectItem>
+                      <SelectItem value="december">December</SelectItem>
                     </SelectContent>
                   </Select>
                   <FormDescription>
@@ -846,15 +846,15 @@ export function EINForm({ onSuccess }: EINFormProps) {
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        <SelectItem value="Living Trust">Living Trust</SelectItem>
-                        <SelectItem value="Revocable Trust">Revocable Trust</SelectItem>
-                        <SelectItem value="Irrevocable Trust">Irrevocable Trust</SelectItem>
-                        <SelectItem value="Family Trust">Family Trust</SelectItem>
-                        <SelectItem value="Business Trust">Business Trust</SelectItem>
-                        <SelectItem value="Land Trust">Land Trust</SelectItem>
-                        <SelectItem value="Asset Protection Trust">Asset Protection Trust</SelectItem>
-                        <SelectItem value="Statutory Trust">Statutory Trust</SelectItem>
-                        <SelectItem value="Other">Other</SelectItem>
+                        <SelectItem value="living-trust">Living Trust</SelectItem>
+                        <SelectItem value="revocable-trust">Revocable Trust</SelectItem>
+                        <SelectItem value="irrevocable-trust">Irrevocable Trust</SelectItem>
+                        <SelectItem value="family-trust">Family Trust</SelectItem>
+                        <SelectItem value="business-trust">Business Trust</SelectItem>
+                        <SelectItem value="land-trust">Land Trust</SelectItem>
+                        <SelectItem value="asset-protection-trust">Asset Protection Trust</SelectItem>
+                        <SelectItem value="statutory-trust">Statutory Trust</SelectItem>
+                        <SelectItem value="other">Other</SelectItem>
                       </SelectContent>
                     </Select>
                   </FormItem>
