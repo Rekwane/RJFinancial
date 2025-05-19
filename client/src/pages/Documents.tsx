@@ -87,43 +87,47 @@ export default function Documents() {
   // In a real app, this would use the authenticated user's ID
   const userId = 1; // Placeholder
   
-  // Query for documents
+  // Query for user documents - this will only fetch documents belonging to the logged-in user
   const { data: documents = [], isLoading: isLoadingDocuments } = useQuery<Document[]>({
     queryKey: ['/api/documents', { userId, documentType: filterType }],
     // Always enabled to fetch real documents
     queryFn: async () => {
-      // This will be replaced with actual API call when backend is connected
-      return sampleDocuments;
+      // In a real implementation, this would validate user identity server-side
+      // Only return documents that match the current userId
+      return sampleDocuments.filter(doc => doc.userId === userId);
     }
   });
   
-  // Query for dispute letters
+  // Query for user's dispute letters
   const { data: disputeDocuments = [], isLoading: isLoadingDisputeLetters } = useQuery<Document[]>({
     queryKey: ['/api/disputes', { userId }],
     // Always enabled to fetch real documents
     queryFn: async () => {
-      // This will be replaced with actual API call when backend is connected
-      return disputeLetterDocuments;
+      // In a real implementation, this would validate user identity server-side
+      // Only return documents that match the current userId
+      return disputeLetterDocuments.filter(doc => doc.userId === userId);
     }
   });
   
-  // Query for trust documents
+  // Query for user's trust documents
   const { data: trustDocuments = [], isLoading: isLoadingTrustDocs } = useQuery<Document[]>({
     queryKey: ['/api/trust-documents', { userId }],
     // Always enabled to fetch real documents
     queryFn: async () => {
-      // This will be replaced with actual API call when backend is connected
-      return trustDocsItems;
+      // In a real implementation, this would validate user identity server-side
+      // Only return documents that match the current userId
+      return trustDocsItems.filter(doc => doc.userId === userId);
     }
   });
   
-  // Query for EIN applications
+  // Query for user's EIN applications
   const { data: einDocuments = [], isLoading: isLoadingEINDocs } = useQuery<Document[]>({
     queryKey: ['/api/ein-applications', { userId }],
     // Always enabled to fetch real documents
     queryFn: async () => {
-      // This will be replaced with actual API call when backend is connected
-      return einApplicationDocs;
+      // In a real implementation, this would validate user identity server-side
+      // Only return documents that match the current userId
+      return einApplicationDocs.filter(doc => doc.userId === userId);
     }
   });
   
@@ -487,7 +491,7 @@ export default function Documents() {
               <SelectValue placeholder="Filter by type" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="">All Types</SelectItem>
+              <SelectItem value="all">All Types</SelectItem>
               <SelectItem value="Dispute">Disputes</SelectItem>
               <SelectItem value="Trust">Trust Documents</SelectItem>
               <SelectItem value="EIN">EIN Applications</SelectItem>
