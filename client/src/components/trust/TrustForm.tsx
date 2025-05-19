@@ -23,10 +23,13 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { getTrustTemplate } from "@/lib/trust-templates";
+import { getTrustTemplate, SCHEDULE_A_TEMPLATE } from "@/lib/trust-templates";
 import { TrustType } from "@/types";
-import { Plus, Trash } from "lucide-react";
+import { Plus, Trash, FileText, Download, Upload } from "lucide-react";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 // Extend the trust document schema with validation rules
 const trustFormSchema = z.object({
@@ -148,213 +151,313 @@ export function TrustForm({ onSuccess, onPreview }: TrustFormProps) {
     }
   }
 
+  const [scheduleADialogOpen, setScheduleADialogOpen] = useState(false);
+  const [scheduleAPreview, setScheduleAPreview] = useState("");
+
+  const handleViewScheduleA = () => {
+    setScheduleAPreview(SCHEDULE_A_TEMPLATE);
+    setScheduleADialogOpen(true);
+  };
+
+  const handleUseScheduleATemplate = () => {
+    // Add multiple assets from the Schedule A template
+    const commonAssets = [
+      { description: "Bank accounts (checking, savings, CDs)", value: "" },
+      { description: "Real estate property", value: "" },
+      { description: "Vehicles (cars, boats, RVs)", value: "" },
+      { description: "Investment accounts", value: "" },
+      { description: "Retirement accounts", value: "" },
+      { description: "Life insurance policies", value: "" },
+      { description: "Business interests", value: "" },
+      { description: "Intellectual property", value: "" },
+      { description: "Personal valuables (jewelry, art, collectibles)", value: "" },
+      { description: "Digital assets", value: "" }
+    ];
+    
+    // Clear existing assets and add the template items
+    assetsFieldArray.remove();
+    commonAssets.forEach(asset => {
+      assetsFieldArray.append(asset);
+    });
+    
+    setScheduleADialogOpen(false);
+  };
+
   return (
-    <Card className="w-full">
-      <CardHeader>
-        <CardTitle>Create Trust Document</CardTitle>
-        <CardDescription>
-          Set up a trust to protect your assets and provide financial security.
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <FormField
-                control={form.control}
-                name="trustName"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Trust Name</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Enter trust name" {...field} />
-                    </FormControl>
-                    <FormDescription>
-                      The official name of your trust.
-                    </FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              
-              <FormField
-                control={form.control}
-                name="trustType"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Trust Type</FormLabel>
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+    <>
+      <Card className="w-full">
+        <CardHeader>
+          <CardTitle>Create Trust Document</CardTitle>
+          <CardDescription>
+            Set up a trust to protect your assets and provide financial security.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <FormField
+                  control={form.control}
+                  name="trustName"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Trust Name</FormLabel>
                       <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select a trust type" />
-                        </SelectTrigger>
+                        <Input placeholder="Enter trust name" {...field} />
                       </FormControl>
-                      <SelectContent>
-                        <SelectItem value="Living">Living Trust</SelectItem>
-                        <SelectItem value="Revocable">Revocable Trust</SelectItem>
-                        <SelectItem value="Irrevocable">Irrevocable Trust</SelectItem>
-                      </SelectContent>
-                    </Select>
-                    <FormDescription>
-                      Different trust types offer different benefits and protections.
-                    </FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-            
-            {/* Trustees Section */}
-            <div>
-              <h3 className="text-lg font-medium mb-4">Trustees</h3>
-              <div className="space-y-4">
-                {trusteesFieldArray.fields.map((field, index) => (
-                  <div key={field.id} className="flex items-center gap-4">
-                    <FormField
-                      control={form.control}
-                      name={`trusteeNames.${index}.name`}
-                      render={({ field }) => (
-                        <FormItem className="flex-1">
-                          <FormControl>
-                            <Input placeholder="Trustee name" {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
+                      <FormDescription>
+                        The official name of your trust.
+                      </FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                
+                <FormField
+                  control={form.control}
+                  name="trustType"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Trust Type</FormLabel>
+                      <Select onValueChange={field.onChange} defaultValue={field.value}>
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select a trust type" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          <SelectItem value="Living">Living Trust</SelectItem>
+                          <SelectItem value="Revocable">Revocable Trust</SelectItem>
+                          <SelectItem value="Irrevocable">Irrevocable Trust</SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <FormDescription>
+                        Different trust types offer different benefits and protections.
+                      </FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+              
+              {/* Trustees Section */}
+              <div>
+                <h3 className="text-lg font-medium mb-4">Trustees</h3>
+                <div className="space-y-4">
+                  {trusteesFieldArray.fields.map((field, index) => (
+                    <div key={field.id} className="flex items-center gap-4">
+                      <FormField
+                        control={form.control}
+                        name={`trusteeNames.${index}.name`}
+                        render={({ field }) => (
+                          <FormItem className="flex-1">
+                            <FormControl>
+                              <Input placeholder="Trustee name" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="icon"
+                        onClick={() => trusteesFieldArray.remove(index)}
+                        disabled={trusteesFieldArray.fields.length === 1}
+                      >
+                        <Trash className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  ))}
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={() => trusteesFieldArray.append({ name: "" })}
+                  >
+                    <Plus className="mr-2 h-4 w-4" />
+                    Add Trustee
+                  </Button>
+                </div>
+              </div>
+              
+              {/* Beneficiaries Section */}
+              <div>
+                <h3 className="text-lg font-medium mb-4">Beneficiaries</h3>
+                <div className="space-y-4">
+                  {beneficiariesFieldArray.fields.map((field, index) => (
+                    <div key={field.id} className="flex items-center gap-4">
+                      <FormField
+                        control={form.control}
+                        name={`beneficiaryNames.${index}.name`}
+                        render={({ field }) => (
+                          <FormItem className="flex-1">
+                            <FormControl>
+                              <Input placeholder="Beneficiary name" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="icon"
+                        onClick={() => beneficiariesFieldArray.remove(index)}
+                        disabled={beneficiariesFieldArray.fields.length === 1}
+                      >
+                        <Trash className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  ))}
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={() => beneficiariesFieldArray.append({ name: "" })}
+                  >
+                    <Plus className="mr-2 h-4 w-4" />
+                    Add Beneficiary
+                  </Button>
+                </div>
+              </div>
+              
+              {/* Assets Section with Schedule A integration */}
+              <div>
+                <div className="flex justify-between items-center mb-4">
+                  <h3 className="text-lg font-medium">Assets</h3>
+                  <div className="flex gap-2">
                     <Button
                       type="button"
                       variant="outline"
-                      size="icon"
-                      onClick={() => trusteesFieldArray.remove(index)}
-                      disabled={trusteesFieldArray.fields.length === 1}
+                      size="sm"
+                      onClick={handleViewScheduleA}
                     >
-                      <Trash className="h-4 w-4" />
+                      <FileText className="mr-2 h-4 w-4" />
+                      View Schedule A Template
                     </Button>
-                  </div>
-                ))}
-                <Button
-                  type="button"
-                  variant="outline"
-                  size="sm"
-                  onClick={() => trusteesFieldArray.append({ name: "" })}
-                >
-                  <Plus className="mr-2 h-4 w-4" />
-                  Add Trustee
-                </Button>
-              </div>
-            </div>
-            
-            {/* Beneficiaries Section */}
-            <div>
-              <h3 className="text-lg font-medium mb-4">Beneficiaries</h3>
-              <div className="space-y-4">
-                {beneficiariesFieldArray.fields.map((field, index) => (
-                  <div key={field.id} className="flex items-center gap-4">
-                    <FormField
-                      control={form.control}
-                      name={`beneficiaryNames.${index}.name`}
-                      render={({ field }) => (
-                        <FormItem className="flex-1">
-                          <FormControl>
-                            <Input placeholder="Beneficiary name" {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
                     <Button
                       type="button"
                       variant="outline"
-                      size="icon"
-                      onClick={() => beneficiariesFieldArray.remove(index)}
-                      disabled={beneficiariesFieldArray.fields.length === 1}
+                      size="sm"
+                      onClick={handleUseScheduleATemplate}
                     >
-                      <Trash className="h-4 w-4" />
+                      <Download className="mr-2 h-4 w-4" />
+                      Use Common Assets Template
                     </Button>
                   </div>
-                ))}
-                <Button
-                  type="button"
-                  variant="outline"
-                  size="sm"
-                  onClick={() => beneficiariesFieldArray.append({ name: "" })}
-                >
-                  <Plus className="mr-2 h-4 w-4" />
-                  Add Beneficiary
-                </Button>
+                </div>
+                
+                <div className="space-y-4">
+                  {assetsFieldArray.fields.map((field, index) => (
+                    <div key={field.id} className="flex items-center gap-4">
+                      <FormField
+                        control={form.control}
+                        name={`assetsList.${index}.description`}
+                        render={({ field }) => (
+                          <FormItem className="flex-1">
+                            <FormControl>
+                              <Input placeholder="Asset description" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={form.control}
+                        name={`assetsList.${index}.value`}
+                        render={({ field }) => (
+                          <FormItem className="w-1/3">
+                            <FormControl>
+                              <Input placeholder="Estimated value" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="icon"
+                        onClick={() => assetsFieldArray.remove(index)}
+                        disabled={assetsFieldArray.fields.length === 1}
+                      >
+                        <Trash className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  ))}
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={() => assetsFieldArray.append({ description: "", value: "" })}
+                  >
+                    <Plus className="mr-2 h-4 w-4" />
+                    Add Asset
+                  </Button>
+                </div>
               </div>
-            </div>
-            
-            {/* Assets Section */}
-            <div>
-              <h3 className="text-lg font-medium mb-4">Assets (Optional)</h3>
+              
+              <input type="hidden" {...form.register("userId")} />
+            </form>
+          </Form>
+        </CardContent>
+        <CardFooter className="flex justify-between">
+          <Button variant="outline" onClick={handlePreview} disabled={createTrustMutation.isPending}>
+            Preview Document
+          </Button>
+          <Button 
+            type="submit" 
+            onClick={form.handleSubmit(onSubmit)}
+            disabled={createTrustMutation.isPending}
+          >
+            {createTrustMutation.isPending ? "Creating..." : "Create Trust Document"}
+          </Button>
+        </CardFooter>
+      </Card>
+
+      {/* Schedule A Template Dialog */}
+      <Dialog open={scheduleADialogOpen} onOpenChange={setScheduleADialogOpen}>
+        <DialogContent className="max-w-4xl max-h-[80vh] overflow-auto">
+          <DialogHeader>
+            <DialogTitle>Schedule A - Property List Template</DialogTitle>
+            <DialogDescription>
+              This comprehensive template lists all property types that can be included in your trust.
+            </DialogDescription>
+          </DialogHeader>
+          
+          <Tabs defaultValue="preview">
+            <TabsList className="grid w-full grid-cols-2">
+              <TabsTrigger value="preview">Preview</TabsTrigger>
+              <TabsTrigger value="use">Add to Your Trust</TabsTrigger>
+            </TabsList>
+            <TabsContent value="preview">
+              <div className="text-sm font-mono whitespace-pre-wrap bg-gray-50 p-4 rounded-md border max-h-[60vh] overflow-auto">
+                {scheduleAPreview}
+              </div>
+            </TabsContent>
+            <TabsContent value="use">
               <div className="space-y-4">
-                {assetsFieldArray.fields.map((field, index) => (
-                  <div key={field.id} className="flex items-center gap-4">
-                    <FormField
-                      control={form.control}
-                      name={`assetsList.${index}.description`}
-                      render={({ field }) => (
-                        <FormItem className="flex-1">
-                          <FormControl>
-                            <Input placeholder="Asset description" {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={form.control}
-                      name={`assetsList.${index}.value`}
-                      render={({ field }) => (
-                        <FormItem className="w-1/3">
-                          <FormControl>
-                            <Input placeholder="Estimated value" {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <Button
-                      type="button"
-                      variant="outline"
-                      size="icon"
-                      onClick={() => assetsFieldArray.remove(index)}
-                      disabled={assetsFieldArray.fields.length === 1}
-                    >
-                      <Trash className="h-4 w-4" />
-                    </Button>
-                  </div>
-                ))}
-                <Button
-                  type="button"
-                  variant="outline"
-                  size="sm"
-                  onClick={() => assetsFieldArray.append({ description: "", value: "" })}
-                >
-                  <Plus className="mr-2 h-4 w-4" />
-                  Add Asset
-                </Button>
+                <p>The Schedule A template provides a comprehensive list of assets that can be included in your trust, such as:</p>
+                <ul className="list-disc pl-6 space-y-2">
+                  <li>Bank accounts and financial assets</li>
+                  <li>Real estate properties</li>
+                  <li>Vehicles, boats, and other conveyances</li>
+                  <li>Investment and retirement accounts</li>
+                  <li>Business interests and intellectual property</li>
+                  <li>Personal property and valuable items</li>
+                </ul>
+                <p>You can use our template to quickly add common asset categories to your trust.</p>
+                <div className="flex justify-end mt-4">
+                  <Button onClick={handleUseScheduleATemplate}>
+                    Use Common Assets Template
+                  </Button>
+                </div>
               </div>
-            </div>
-            
-            <input type="hidden" {...form.register("userId")} />
-          </form>
-        </Form>
-      </CardContent>
-      <CardFooter className="flex justify-between">
-        <Button variant="outline" onClick={handlePreview} disabled={createTrustMutation.isPending}>
-          Preview Document
-        </Button>
-        <Button 
-          type="submit" 
-          onClick={form.handleSubmit(onSubmit)}
-          disabled={createTrustMutation.isPending}
-        >
-          {createTrustMutation.isPending ? "Creating..." : "Create Trust Document"}
-        </Button>
-      </CardFooter>
-    </Card>
+            </TabsContent>
+          </Tabs>
+        </DialogContent>
+      </Dialog>
+    </>
   );
 }
