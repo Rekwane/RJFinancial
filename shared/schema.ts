@@ -248,6 +248,41 @@ export const insertServiceCommentSchema = createInsertSchema(serviceComments).om
   createdAt: true,
 });
 
+// Dispute Letter Category schema
+export const disputeLetterCategories = pgTable("dispute_letter_categories", {
+  id: serial("id").primaryKey(),
+  slug: text("slug").notNull().unique(),
+  name: text("name").notNull(),
+  description: text("description"),
+  count: integer("count").default(0),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+export const insertDisputeLetterCategorySchema = createInsertSchema(disputeLetterCategories).omit({
+  id: true,
+  count: true,
+  createdAt: true,
+});
+
+// Dispute Letter Template schema
+export const disputeLetterTemplates = pgTable("dispute_letter_templates", {
+  id: serial("id").primaryKey(),
+  title: text("title").notNull(),
+  description: text("description"),
+  categoryId: integer("category_id").notNull(),
+  fileUrl: text("file_url").notNull(),
+  fileSize: integer("file_size"),
+  tags: text("tags").array(),
+  uploadedBy: integer("uploaded_by").notNull(),
+  dateAdded: timestamp("date_added").defaultNow(),
+  isActive: boolean("is_active").default(true),
+});
+
+export const insertDisputeLetterTemplateSchema = createInsertSchema(disputeLetterTemplates).omit({
+  id: true,
+  dateAdded: true,
+});
+
 // Export types
 export type User = typeof users.$inferSelect;
 export type InsertUser = z.infer<typeof insertUserSchema>;
@@ -275,6 +310,12 @@ export type InsertStock = z.infer<typeof insertStockSchema>;
 
 export type News = typeof news.$inferSelect;
 export type InsertNews = z.infer<typeof insertNewsSchema>;
+
+export type DisputeLetterCategory = typeof disputeLetterCategories.$inferSelect;
+export type InsertDisputeLetterCategory = z.infer<typeof insertDisputeLetterCategorySchema>;
+
+export type DisputeLetterTemplate = typeof disputeLetterTemplates.$inferSelect;
+export type InsertDisputeLetterTemplate = z.infer<typeof insertDisputeLetterTemplateSchema>;
 
 export type UserRole = typeof userRoles.$inferSelect;
 export type InsertUserRole = z.infer<typeof insertUserRoleSchema>;
