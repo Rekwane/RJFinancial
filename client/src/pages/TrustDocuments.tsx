@@ -17,6 +17,7 @@ import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { FileText, Shield, Info, GavelIcon, BookOpen, AlertTriangle } from "lucide-react";
 import { getTrustTemplate } from "@/lib/trust-templates";
+import { getTrafficRemedyTemplate } from "@/lib/traffic-ticket-templates";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Separator } from "@/components/ui/separator";
 
@@ -27,6 +28,7 @@ export default function TrustDocuments() {
     template: "",
     formData: undefined,
   });
+  const [trafficTemplateType, setTrafficTemplateType] = useState<string | null>(null);
   
   // In a real app, this would use the authenticated user's ID
   const userId = 1; // Placeholder
