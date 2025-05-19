@@ -16,6 +16,7 @@ import Documents from "@/pages/Documents";
 import FinancialNews from "@/pages/FinancialNews";
 import NotificationsPage from "@/pages/NotificationsPage";
 import DisputeLettersPage from "@/pages/DisputeLettersPage";
+import CreditTipsPage from "@/pages/CreditTipsPage";
 import { Header } from "@/components/layout/Header";
 import { Sidebar } from "@/components/layout/Sidebar";
 import { useState, useEffect } from "react";
@@ -38,7 +39,7 @@ function Router() {
             <Route path="/register" component={Register} />
             <Route path="/credit-repair" component={CreditRepair} />
             <Route path="/dispute-letters" component={DisputeLettersPage} />
-            <Route path="/credit-tips" component={CreditRepair} />
+            <Route path="/credit-tips" component={CreditTipsPage} />
             <Route path="/trust" component={TrustDocuments} />
             <Route path="/traffic-tickets" component={TrafficTicketRemedies} />
             <Route path="/ein" component={EINApplication} />
