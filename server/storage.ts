@@ -13,7 +13,9 @@ import {
   progressUpdates, type ProgressUpdate, type InsertProgressUpdate,
   serviceComments, type ServiceComment, type InsertServiceComment,
   userRoles, type UserRole, type InsertUserRole,
-  serviceTypes, type ServiceType, type InsertServiceType
+  serviceTypes, type ServiceType, type InsertServiceType,
+  disputeLetterCategories, type DisputeLetterCategory, type InsertDisputeLetterCategory,
+  disputeLetterTemplates, type DisputeLetterTemplate, type InsertDisputeLetterTemplate
 } from "@shared/schema";
 import { db } from "./db";
 import { eq, and, desc, sql, not, isNull, inArray } from "drizzle-orm";
@@ -24,6 +26,16 @@ export interface IStorage {
   getUserByUsername(username: string): Promise<User | undefined>;
   getUserByEmail(email: string): Promise<User | undefined>;
   createUser(user: InsertUser): Promise<User>;
+  
+  // Dispute Letter Category operations
+  getDisputeLetterCategories(): Promise<DisputeLetterCategory[]>;
+  getDisputeLetterCategoryById(id: number): Promise<DisputeLetterCategory | undefined>;
+  createDisputeLetterCategory(category: InsertDisputeLetterCategory): Promise<DisputeLetterCategory>;
+  
+  // Dispute Letter Template operations
+  getDisputeLetterTemplates(categoryId?: number): Promise<DisputeLetterTemplate[]>;
+  getDisputeLetterTemplateById(id: number): Promise<DisputeLetterTemplate | undefined>;
+  createDisputeLetterTemplate(template: InsertDisputeLetterTemplate): Promise<DisputeLetterTemplate>;
   
   // Credit report operations
   getCreditReportsByUserId(userId: number): Promise<CreditReport[]>;
@@ -434,6 +446,63 @@ export class DatabaseStorage implements IStorage {
   async createUser(userData: InsertUser): Promise<User> {
     const [user] = await db.insert(users).values(userData).returning();
     return user;
+  }
+  
+  // Dispute Letter Category operations
+  async getDisputeLetterCategories(): Promise<DisputeLetterCategory[]> {
+    return await db.select().from(disputeLetterCategories).orderBy(disputeLetterCategories.name);
+  }
+  
+  async getDisputeLetterCategoryById(id: number): Promise<DisputeLetterCategory | undefined> {
+    const [category] = await db.select().from(disputeLetterCategories).where(eq(disputeLetterCategories.id, id));
+    return category;
+  }
+  
+  async createDisputeLetterCategory(categoryData: InsertDisputeLetterCategory): Promise<DisputeLetterCategory> {
+    const [category] = await db.insert(disputeLetterCategories).values(categoryData).returning();
+    return category;
+  }
+  
+  // Dispute Letter Template operations
+  async getDisputeLetterTemplates(categoryId?: number): Promise<DisputeLetterTemplate[]> {
+    if (categoryId) {
+      return await db
+        .select()
+        .from(disputeLetterTemplates)
+        .where(and(
+          eq(disputeLetterTemplates.categoryId, categoryId),
+          eq(disputeLetterTemplates.isActive, true)
+        ))
+        .orderBy(disputeLetterTemplates.dateAdded);
+    } else {
+      return await db
+        .select()
+        .from(disputeLetterTemplates)
+        .where(eq(disputeLetterTemplates.isActive, true))
+        .orderBy(disputeLetterTemplates.dateAdded);
+    }
+  }
+  
+  async getDisputeLetterTemplateById(id: number): Promise<DisputeLetterTemplate | undefined> {
+    const [template] = await db
+      .select()
+      .from(disputeLetterTemplates)
+      .where(eq(disputeLetterTemplates.id, id));
+    return template;
+  }
+  
+  async createDisputeLetterTemplate(templateData: InsertDisputeLetterTemplate): Promise<DisputeLetterTemplate> {
+    const [template] = await db.insert(disputeLetterTemplates).values(templateData).returning();
+    
+    // Update count in category
+    const categoryId = templateData.categoryId;
+    await db.execute(
+      sql`UPDATE ${disputeLetterCategories} 
+          SET count = count + 1 
+          WHERE id = ${categoryId}`
+    );
+    
+    return template;
   }
 
   // Credit report operations

@@ -185,17 +185,25 @@ export function DisputeLetterLibrary() {
   const [selectedLetter, setSelectedLetter] = useState<DisputeLetter | null>(null);
   const [viewingPdf, setViewingPdf] = useState(false);
   
-  // In a real implementation, this would fetch from your API
-  // For now, we'll simulate an API call with our mock data
+  // Fetch dispute letter templates from the API
   const { data: disputeLetters = MOCK_DISPUTE_LETTERS, isLoading } = useQuery({
-    queryKey: ["dispute-letters"],
+    queryKey: ["/api/dispute-letter-templates"],
+    // In a real implementation with the DB connected, this would fetch the actual data
     queryFn: async () => {
-      // In production, replace with actual API call
-      // return await apiRequest("/api/dispute-letters");
-      
-      // Simulate API delay
+      // Simulate API delay for demo purposes
       await new Promise(r => setTimeout(r, 500));
       return MOCK_DISPUTE_LETTERS;
+    }
+  });
+  
+  // Fetch dispute letter categories from the API
+  const { data: categories = DISPUTE_CATEGORIES } = useQuery({
+    queryKey: ["/api/dispute-letter-categories"],
+    // In a real implementation with the DB connected, this would fetch the actual data
+    queryFn: async () => {
+      // Simulate API delay for demo purposes
+      await new Promise(r => setTimeout(r, 500));
+      return DISPUTE_CATEGORIES;
     }
   });
   

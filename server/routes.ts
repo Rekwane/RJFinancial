@@ -11,7 +11,9 @@ import {
   insertNotificationSchema,
   insertStockSchema,
   insertNewsSchema,
-  insertCreditReportSchema
+  insertCreditReportSchema,
+  insertDisputeLetterCategorySchema,
+  insertDisputeLetterTemplateSchema
 } from "@shared/schema";
 import { ZodError } from "zod";
 
@@ -470,6 +472,60 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.status(201).json(newsItem);
     } catch (error) {
       res.status(500).json({ message: "Failed to create news item" });
+    }
+  });
+
+  // Dispute Letter Category Routes
+  apiRouter.get("/dispute-letter-categories", async (req, res) => {
+    try {
+      const categories = await storage.getDisputeLetterCategories();
+      res.status(200).json(categories);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch dispute letter categories" });
+    }
+  });
+
+  apiRouter.post("/dispute-letter-categories", validateRequest(insertDisputeLetterCategorySchema), async (req, res) => {
+    try {
+      const category = await storage.createDisputeLetterCategory(req.body);
+      res.status(201).json(category);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to create dispute letter category" });
+    }
+  });
+
+  // Dispute Letter Template Routes
+  apiRouter.get("/dispute-letter-templates", async (req, res) => {
+    try {
+      const categoryId = req.query.categoryId ? Number(req.query.categoryId) : undefined;
+      const templates = await storage.getDisputeLetterTemplates(categoryId);
+      res.status(200).json(templates);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch dispute letter templates" });
+    }
+  });
+
+  apiRouter.get("/dispute-letter-templates/:id", async (req, res) => {
+    try {
+      const id = Number(req.params.id);
+      const template = await storage.getDisputeLetterTemplateById(id);
+      
+      if (!template) {
+        return res.status(404).json({ message: "Dispute letter template not found" });
+      }
+      
+      res.status(200).json(template);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to fetch dispute letter template" });
+    }
+  });
+
+  apiRouter.post("/dispute-letter-templates", validateRequest(insertDisputeLetterTemplateSchema), async (req, res) => {
+    try {
+      const template = await storage.createDisputeLetterTemplate(req.body);
+      res.status(201).json(template);
+    } catch (error) {
+      res.status(500).json({ message: "Failed to create dispute letter template" });
     }
   });
 
