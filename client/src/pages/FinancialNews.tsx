@@ -4,7 +4,7 @@ import { News, NewsCategory } from "@/types";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Search, Filter, Calendar, Clock, Globe, ArrowRight, RefreshCw } from "lucide-react";
+import { Search, Filter, Calendar, Clock, Globe, ArrowRight, RefreshCw, FileText, TrendingUp, Share2 } from "lucide-react";
 import {
   Tabs,
   TabsContent,

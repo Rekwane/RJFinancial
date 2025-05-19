@@ -292,7 +292,7 @@ export default function NotificationsPage() {
     } else if (diffInDays <= 7) {
       return { text: `Due in ${diffInDays} days`, color: "text-blue-600 bg-blue-100" };
     } else {
-      return { text: format(due, "Due MMM d"), color: "text-gray-600 bg-gray-100" };
+      return { text: format(due, "'Due' MMM d"), color: "text-gray-600 bg-gray-100" };
     }
   };
   
