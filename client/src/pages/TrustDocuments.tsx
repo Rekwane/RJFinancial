@@ -15,11 +15,41 @@ import {
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { FileText, Shield, Info, GavelIcon, BookOpen, AlertTriangle } from "lucide-react";
+import { FileText, Shield, Info, GavelIcon, BookOpen, AlertTriangle, FilePlus, Download } from "lucide-react";
 import { getTrustTemplate } from "@/lib/trust-templates";
 import { getTrafficRemedyTemplate } from "@/lib/traffic-ticket-templates";
+import { getLegalTemplate } from "@/lib/legal-templates";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Separator } from "@/components/ui/separator";
+import { 
+  Form, 
+  FormControl, 
+  FormDescription, 
+  FormField, 
+  FormItem, 
+  FormLabel, 
+  FormMessage 
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+
+// Define the form schema for Declaration of Trust
+const declarationOfTrustSchema = z.object({
+  trustName: z.string().min(2, { message: "Trust name must be at least 2 characters" }),
+  grantorName: z.string().min(2, { message: "Grantor name is required" }),
+  maritalStatus: z.string().min(1, { message: "Marital status is required" }),
+  children: z.string().optional(),
+  trusteeName: z.string().min(2, { message: "Trustee name is required" }),
+  successorTrustee: z.string().optional(),
+  beneficiaries: z.string().min(2, { message: "At least one beneficiary is required" }),
+  specificBequests: z.string().optional(),
+  childrenAge: z.string().optional(),
+  contingentBeneficiary: z.string().optional()
+});
+
+type DeclarationOfTrustFormValues = z.infer<typeof declarationOfTrustSchema>;
 
 export default function TrustDocuments() {
   const [activeTab, setActiveTab] = useState("create");
@@ -29,6 +59,71 @@ export default function TrustDocuments() {
     formData: undefined,
   });
   const [trafficTemplateType, setTrafficTemplateType] = useState<string | null>(null);
+  const [legalTemplateType, setLegalTemplateType] = useState<string | null>(null);
+  const [showDeclarationForm, setShowDeclarationForm] = useState(false);
+  const [compiledTrustDoc, setCompiledTrustDoc] = useState<string | null>(null);
+  
+  // Set up the form
+  const declarationForm = useForm<DeclarationOfTrustFormValues>({
+    defaultValues: {
+      trustName: "",
+      grantorName: "",
+      maritalStatus: "Single",
+      children: "",
+      trusteeName: "",
+      successorTrustee: "",
+      beneficiaries: "",
+      specificBequests: "",
+      childrenAge: "21",
+      contingentBeneficiary: ""
+    }
+  });
+  
+  // Function to compile the trust document with form data
+  function compileTrustDocument(data: DeclarationOfTrustFormValues) {
+    let template = getLegalTemplate("declaration-of-trust");
+    
+    // Replace placeholders with actual data
+    template = template.replace(/\[TRUST NAME\]/g, data.trustName);
+    template = template.replace(/\[GRANTOR NAME\]/g, data.grantorName);
+    template = template.replace(/\[MARITAL STATUS\]/g, data.maritalStatus);
+    
+    // Handle children
+    const childrenList = data.children ? data.children.split(',').map(child => child.trim()) : [];
+    template = template.replace(/\[NUMBER\]/g, childrenList.length.toString());
+    
+    if (childrenList.length > 0) {
+      let childrenText = '';
+      childrenList.forEach(child => {
+        childrenText += `${child}\n`;
+      });
+      template = template.replace(/\[CHILD NAME 1\]\n\[CHILD NAME 2\]/g, childrenText.trim());
+    } else {
+      template = template.replace(/\[CHILD NAME 1\]\n\[CHILD NAME 2\]/g, "None");
+    }
+    
+    // Replace trustee information
+    template = template.replace(/\[TRUSTEE NAME\]/g, data.trusteeName);
+    template = template.replace(/\[SUCCESSOR TRUSTEE\]/g, data.successorTrustee || "None designated");
+    
+    // Handle specific bequests
+    template = template.replace(/\[LIST SPECIFIC BEQUESTS\]/g, data.specificBequests || "None");
+    
+    // Replace children age
+    template = template.replace(/\[AGE\]/g, data.childrenAge || "21");
+    
+    // Replace contingent beneficiary
+    template = template.replace(/\[CONTINGENT BENEFICIARY\]/g, data.contingentBeneficiary || "the Grantor's heirs at law");
+    
+    return template;
+  }
+  
+  // Handle form submission
+  function onSubmit(data: DeclarationOfTrustFormValues) {
+    const compiledDoc = compileTrustDocument(data);
+    setCompiledTrustDoc(compiledDoc);
+    setShowDeclarationForm(false);
+  }
   
   // In a real app, this would use the authenticated user's ID
   const userId = 1; // Placeholder
