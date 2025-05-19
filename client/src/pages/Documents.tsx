@@ -552,6 +552,7 @@ export default function Documents() {
                         <SelectItem value="Trust">Trust Document</SelectItem>
                         <SelectItem value="EIN">EIN Application</SelectItem>
                         <SelectItem value="Report">Credit Report</SelectItem>
+                        <SelectItem value="Other">Other</SelectItem>
                       </SelectContent>
                     </Select>
                     <FormMessage />
