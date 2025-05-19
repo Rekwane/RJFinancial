@@ -8,7 +8,15 @@ import {
   notifications, type Notification, type InsertNotification,
   stocks, type Stock, type InsertStock,
   news, type News, type InsertNews,
+  serviceRequests, type ServiceRequest, type InsertServiceRequest,
+  taskAssignments, type TaskAssignment, type InsertTaskAssignment,
+  progressUpdates, type ProgressUpdate, type InsertProgressUpdate,
+  serviceComments, type ServiceComment, type InsertServiceComment,
+  userRoles, type UserRole, type InsertUserRole,
+  serviceTypes, type ServiceType, type InsertServiceType
 } from "@shared/schema";
+import { db } from "./db";
+import { eq, and, desc, sql, not, isNull, inArray } from "drizzle-orm";
 
 export interface IStorage {
   // User operations
@@ -63,6 +71,32 @@ export interface IStorage {
   getNewsByCategory(category: string): Promise<News[]>;
   getNewsById(id: number): Promise<News | undefined>;
   createNews(news: InsertNews): Promise<News>;
+  
+  // Service tracking operations
+  getServiceRequestsByClientId(clientId: number): Promise<ServiceRequest[]>;
+  getServiceRequestById(id: number): Promise<ServiceRequest | undefined>;
+  createServiceRequest(request: InsertServiceRequest): Promise<ServiceRequest>;
+  updateServiceRequestStatus(id: number, status: string, completionDate?: Date): Promise<ServiceRequest | undefined>;
+  
+  // Task assignment operations
+  getTaskAssignmentsByWorkerId(workerId: number): Promise<TaskAssignment[]>;
+  getUnassignedTasks(): Promise<TaskAssignment[]>;
+  getTaskAssignmentById(id: number): Promise<TaskAssignment | undefined>;
+  createTaskAssignment(assignment: InsertTaskAssignment): Promise<TaskAssignment>;
+  updateTaskAssignment(id: number, status: string, completedDate?: Date): Promise<TaskAssignment | undefined>;
+  claimTask(taskId: number, workerId: number): Promise<TaskAssignment | undefined>;
+  
+  // Progress update operations
+  getProgressUpdatesByTaskId(taskId: number): Promise<ProgressUpdate[]>;
+  createProgressUpdate(update: InsertProgressUpdate): Promise<ProgressUpdate>;
+  
+  // Service comment operations
+  getCommentsByServiceRequestId(serviceRequestId: number): Promise<ServiceComment[]>;
+  createServiceComment(comment: InsertServiceComment): Promise<ServiceComment>;
+  
+  // User role operations
+  getUserRoles(userId: number): Promise<UserRole[]>;
+  addUserRole(role: InsertUserRole): Promise<UserRole>;
 }
 
 export class MemStorage implements IStorage {
@@ -380,4 +414,348 @@ export class MemStorage implements IStorage {
   }
 }
 
-export const storage = new MemStorage();
+export class DatabaseStorage implements IStorage {
+  // User operations
+  async getUser(id: number): Promise<User | undefined> {
+    const [user] = await db.select().from(users).where(eq(users.id, id));
+    return user;
+  }
+
+  async getUserByUsername(username: string): Promise<User | undefined> {
+    const [user] = await db.select().from(users).where(eq(users.username, username));
+    return user;
+  }
+
+  async getUserByEmail(email: string): Promise<User | undefined> {
+    const [user] = await db.select().from(users).where(eq(users.email, email));
+    return user;
+  }
+
+  async createUser(userData: InsertUser): Promise<User> {
+    const [user] = await db.insert(users).values(userData).returning();
+    return user;
+  }
+
+  // Credit report operations
+  async getCreditReportsByUserId(userId: number): Promise<CreditReport[]> {
+    return db.select().from(creditReports).where(eq(creditReports.userId, userId));
+  }
+
+  async getCreditReportById(id: number): Promise<CreditReport | undefined> {
+    const [report] = await db.select().from(creditReports).where(eq(creditReports.id, id));
+    return report;
+  }
+
+  async createCreditReport(reportData: InsertCreditReport): Promise<CreditReport> {
+    const [report] = await db.insert(creditReports).values(reportData).returning();
+    return report;
+  }
+
+  // Dispute operations
+  async getDisputesByUserId(userId: number): Promise<Dispute[]> {
+    return db.select().from(disputes).where(eq(disputes.userId, userId));
+  }
+
+  async getDisputeById(id: number): Promise<Dispute | undefined> {
+    const [dispute] = await db.select().from(disputes).where(eq(disputes.id, id));
+    return dispute;
+  }
+
+  async createDispute(disputeData: InsertDispute): Promise<Dispute> {
+    const [dispute] = await db
+      .insert(disputes)
+      .values({
+        ...disputeData,
+        dateResolved: null
+      })
+      .returning();
+    return dispute;
+  }
+
+  async updateDisputeStatus(id: number, status: string, dateResolved?: Date): Promise<Dispute | undefined> {
+    const [updatedDispute] = await db
+      .update(disputes)
+      .set({
+        status,
+        dateResolved: dateResolved || null
+      })
+      .where(eq(disputes.id, id))
+      .returning();
+    return updatedDispute;
+  }
+
+  // Trust document operations
+  async getTrustDocumentsByUserId(userId: number): Promise<TrustDocument[]> {
+    return db.select().from(trustDocuments).where(eq(trustDocuments.userId, userId));
+  }
+
+  async getTrustDocumentById(id: number): Promise<TrustDocument | undefined> {
+    const [document] = await db.select().from(trustDocuments).where(eq(trustDocuments.id, id));
+    return document;
+  }
+
+  async createTrustDocument(docData: InsertTrustDocument): Promise<TrustDocument> {
+    const [document] = await db.insert(trustDocuments).values(docData).returning();
+    return document;
+  }
+
+  // EIN application operations
+  async getEINApplicationsByUserId(userId: number): Promise<EINApplication[]> {
+    return db.select().from(einApplications).where(eq(einApplications.userId, userId));
+  }
+
+  async getEINApplicationById(id: number): Promise<EINApplication | undefined> {
+    const [application] = await db.select().from(einApplications).where(eq(einApplications.id, id));
+    return application;
+  }
+
+  async createEINApplication(appData: InsertEINApplication): Promise<EINApplication> {
+    const [application] = await db
+      .insert(einApplications)
+      .values({
+        ...appData,
+        einNumber: null,
+        approvalDate: null
+      })
+      .returning();
+    return application;
+  }
+
+  async updateEINApplication(id: number, status: string, einNumber?: string): Promise<EINApplication | undefined> {
+    const [updatedApp] = await db
+      .update(einApplications)
+      .set({
+        applicationStatus: status,
+        einNumber: einNumber || null,
+        approvalDate: status === 'Approved' ? new Date() : null
+      })
+      .where(eq(einApplications.id, id))
+      .returning();
+    return updatedApp;
+  }
+
+  // Document operations
+  async getDocumentsByUserId(userId: number, documentType?: string): Promise<Document[]> {
+    if (documentType) {
+      return db
+        .select()
+        .from(documents)
+        .where(and(eq(documents.userId, userId), eq(documents.documentType, documentType)));
+    }
+    return db.select().from(documents).where(eq(documents.userId, userId));
+  }
+
+  async getDocumentById(id: number): Promise<Document | undefined> {
+    const [document] = await db.select().from(documents).where(eq(documents.id, id));
+    return document;
+  }
+
+  async createDocument(documentData: InsertDocument): Promise<Document> {
+    const [document] = await db.insert(documents).values(documentData).returning();
+    return document;
+  }
+
+  async deleteDocument(id: number): Promise<boolean> {
+    const [deleted] = await db.delete(documents).where(eq(documents.id, id)).returning();
+    return !!deleted;
+  }
+
+  // Notification operations
+  async getNotificationsByUserId(userId: number): Promise<Notification[]> {
+    return db
+      .select()
+      .from(notifications)
+      .where(eq(notifications.userId, userId))
+      .orderBy(desc(notifications.createdAt));
+  }
+
+  async getNotificationById(id: number): Promise<Notification | undefined> {
+    const [notification] = await db.select().from(notifications).where(eq(notifications.id, id));
+    return notification;
+  }
+
+  async createNotification(notificationData: InsertNotification): Promise<Notification> {
+    const [notification] = await db.insert(notifications).values(notificationData).returning();
+    return notification;
+  }
+
+  async markNotificationAsRead(id: number): Promise<Notification | undefined> {
+    const [updatedNotification] = await db
+      .update(notifications)
+      .set({ isRead: true })
+      .where(eq(notifications.id, id))
+      .returning();
+    return updatedNotification;
+  }
+
+  // Stock operations
+  async getStocksByUserId(userId: number): Promise<Stock[]> {
+    return db.select().from(stocks).where(eq(stocks.userId, userId));
+  }
+
+  async getStockById(id: number): Promise<Stock | undefined> {
+    const [stock] = await db.select().from(stocks).where(eq(stocks.id, id));
+    return stock;
+  }
+
+  async createStock(stockData: InsertStock): Promise<Stock> {
+    const [stock] = await db.insert(stocks).values(stockData).returning();
+    return stock;
+  }
+
+  async updateStock(id: number, quantity: number, purchasePrice: string): Promise<Stock | undefined> {
+    const [updatedStock] = await db
+      .update(stocks)
+      .set({
+        quantity,
+        purchasePrice
+      })
+      .where(eq(stocks.id, id))
+      .returning();
+    return updatedStock;
+  }
+
+  async deleteStock(id: number): Promise<boolean> {
+    const [deleted] = await db.delete(stocks).where(eq(stocks.id, id)).returning();
+    return !!deleted;
+  }
+
+  // News operations
+  async getAllNews(limit = 10): Promise<News[]> {
+    return db
+      .select()
+      .from(news)
+      .orderBy(desc(news.publishDate))
+      .limit(limit);
+  }
+
+  async getNewsByCategory(category: string): Promise<News[]> {
+    return db
+      .select()
+      .from(news)
+      .where(eq(news.category, category))
+      .orderBy(desc(news.publishDate));
+  }
+
+  async getNewsById(id: number): Promise<News | undefined> {
+    const [newsItem] = await db.select().from(news).where(eq(news.id, id));
+    return newsItem;
+  }
+
+  async createNews(newsData: InsertNews): Promise<News> {
+    const [newsItem] = await db.insert(news).values(newsData).returning();
+    return newsItem;
+  }
+
+  // Service tracking operations
+  async getServiceRequestsByClientId(clientId: number): Promise<ServiceRequest[]> {
+    return db.select().from(serviceRequests).where(eq(serviceRequests.clientId, clientId));
+  }
+
+  async getServiceRequestById(id: number): Promise<ServiceRequest | undefined> {
+    const [request] = await db.select().from(serviceRequests).where(eq(serviceRequests.id, id));
+    return request;
+  }
+
+  async createServiceRequest(requestData: InsertServiceRequest): Promise<ServiceRequest> {
+    const [request] = await db.insert(serviceRequests).values(requestData).returning();
+    return request;
+  }
+
+  async updateServiceRequestStatus(id: number, status: string, completionDate?: Date): Promise<ServiceRequest | undefined> {
+    const [updatedRequest] = await db
+      .update(serviceRequests)
+      .set({
+        status,
+        actualCompletionDate: completionDate || null
+      })
+      .where(eq(serviceRequests.id, id))
+      .returning();
+    return updatedRequest;
+  }
+
+  // Task assignment operations
+  async getTaskAssignmentsByWorkerId(workerId: number): Promise<TaskAssignment[]> {
+    return db.select().from(taskAssignments).where(eq(taskAssignments.workerId, workerId));
+  }
+
+  async getUnassignedTasks(): Promise<TaskAssignment[]> {
+    return db.select().from(taskAssignments).where(isNull(taskAssignments.workerId));
+  }
+
+  async getTaskAssignmentById(id: number): Promise<TaskAssignment | undefined> {
+    const [task] = await db.select().from(taskAssignments).where(eq(taskAssignments.id, id));
+    return task;
+  }
+
+  async createTaskAssignment(assignmentData: InsertTaskAssignment): Promise<TaskAssignment> {
+    const [assignment] = await db.insert(taskAssignments).values(assignmentData).returning();
+    return assignment;
+  }
+
+  async updateTaskAssignment(id: number, status: string, completedDate?: Date): Promise<TaskAssignment | undefined> {
+    const [updatedTask] = await db
+      .update(taskAssignments)
+      .set({
+        status,
+        completedDate: completedDate || null
+      })
+      .where(eq(taskAssignments.id, id))
+      .returning();
+    return updatedTask;
+  }
+
+  async claimTask(taskId: number, workerId: number): Promise<TaskAssignment | undefined> {
+    const [claimedTask] = await db
+      .update(taskAssignments)
+      .set({
+        workerId,
+        status: 'assigned',
+        assignedDate: new Date()
+      })
+      .where(eq(taskAssignments.id, taskId))
+      .returning();
+    return claimedTask;
+  }
+
+  // Progress update operations
+  async getProgressUpdatesByTaskId(taskId: number): Promise<ProgressUpdate[]> {
+    return db
+      .select()
+      .from(progressUpdates)
+      .where(eq(progressUpdates.taskAssignmentId, taskId))
+      .orderBy(desc(progressUpdates.updateDate));
+  }
+
+  async createProgressUpdate(updateData: InsertProgressUpdate): Promise<ProgressUpdate> {
+    const [update] = await db.insert(progressUpdates).values(updateData).returning();
+    return update;
+  }
+
+  // Service comment operations
+  async getCommentsByServiceRequestId(serviceRequestId: number): Promise<ServiceComment[]> {
+    return db
+      .select()
+      .from(serviceComments)
+      .where(eq(serviceComments.serviceRequestId, serviceRequestId))
+      .orderBy(serviceComments.createdAt);
+  }
+
+  async createServiceComment(commentData: InsertServiceComment): Promise<ServiceComment> {
+    const [comment] = await db.insert(serviceComments).values(commentData).returning();
+    return comment;
+  }
+
+  // User role operations
+  async getUserRoles(userId: number): Promise<UserRole[]> {
+    return db.select().from(userRoles).where(eq(userRoles.userId, userId));
+  }
+
+  async addUserRole(roleData: InsertUserRole): Promise<UserRole> {
+    const [role] = await db.insert(userRoles).values(roleData).returning();
+    return role;
+  }
+}
+
+// Initialize with database storage
+export const storage = new DatabaseStorage();
