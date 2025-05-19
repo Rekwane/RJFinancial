@@ -57,7 +57,7 @@ import {
   Calendar,
   XCircle,
   PauseCircle,
-  Refresh
+  RefreshCw
 } from "lucide-react";
 import { format } from "date-fns";
 import { apiRequest } from "@/lib/queryClient";
