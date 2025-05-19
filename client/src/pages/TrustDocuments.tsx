@@ -15,8 +15,10 @@ import {
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { FileText, Shield, Info } from "lucide-react";
+import { FileText, Shield, Info, GavelIcon, BookOpen, AlertTriangle } from "lucide-react";
 import { getTrustTemplate } from "@/lib/trust-templates";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import { Separator } from "@/components/ui/separator";
 
 export default function TrustDocuments() {
   const [activeTab, setActiveTab] = useState("create");
@@ -94,9 +96,10 @@ export default function TrustDocuments() {
       </div>
 
       <Tabs value={activeTab} onValueChange={setActiveTab} className="mb-6">
-        <TabsList className="grid grid-cols-3 w-full max-w-md">
+        <TabsList className="grid grid-cols-4 w-full max-w-2xl">
           <TabsTrigger value="create">Create Trust</TabsTrigger>
           <TabsTrigger value="manage">Manage Trusts</TabsTrigger>
+          <TabsTrigger value="traffic">Traffic Remedies</TabsTrigger>
           <TabsTrigger value="info">Trust Info</TabsTrigger>
         </TabsList>
         
@@ -191,6 +194,166 @@ export default function TrustDocuments() {
                 <Button onClick={() => setActiveTab("create")}>
                   Create New Trust
                 </Button>
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+        
+        <TabsContent value="traffic">
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center">
+                <GavelIcon className="mr-2 h-5 w-5" />
+                Traffic Ticket Remedies
+              </CardTitle>
+              <CardDescription>
+                Learn about effective legal strategies for addressing traffic tickets and navigating the court system.
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              <div className="mb-4 p-4 bg-amber-50 border border-amber-200 rounded-md">
+                <div className="flex items-start">
+                  <AlertTriangle className="mt-1 mr-3 h-5 w-5 text-amber-500" />
+                  <div>
+                    <h4 className="font-medium text-amber-800">Disclaimer</h4>
+                    <p className="text-sm text-amber-700">
+                      This information is provided for educational purposes only and is not legal advice. 
+                      If you need specific legal guidance, please consult with a qualified attorney.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <h3 className="text-lg font-medium mb-3">Understanding the Legal Framework</h3>
+              <p className="text-gray-700 mb-4">
+                Traffic tickets represent complex legal interactions involving contract law, administrative procedures, and jurisdictional questions. Understanding this framework is essential for developing effective remedies.
+              </p>
+              
+              <Accordion type="single" collapsible className="w-full">
+                <AccordionItem value="item-1">
+                  <AccordionTrigger className="text-left">The Three Branches of Government</AccordionTrigger>
+                  <AccordionContent>
+                    <p className="mb-2">To understand traffic court proceedings, it's important to understand the separation of powers:</p>
+                    <ul className="list-disc pl-5 space-y-1 text-gray-700">
+                      <li><strong>Legislative Branch</strong>: The authority to create laws</li>
+                      <li><strong>Executive Branch</strong>: The authority to enforce the laws that were created</li>
+                      <li><strong>Judicial Branch</strong>: The authority to decide the meaning of the law and how to apply them in real life situations/cases</li>
+                    </ul>
+                    <p className="mt-2">When dealing with traffic tickets, you're often navigating a system where these distinctions have become blurred.</p>
+                  </AccordionContent>
+                </AccordionItem>
+                
+                <AccordionItem value="item-2">
+                  <AccordionTrigger className="text-left">What Really Happens With a Traffic Ticket</AccordionTrigger>
+                  <AccordionContent>
+                    <p className="mb-2">When you're issued a ticket, a human being holding an "office" (title) has made a "claim" that your act either:</p>
+                    <ul className="list-disc pl-5 space-y-1 text-gray-700">
+                      <li>Injured persons</li>
+                      <li>Damaged property</li>
+                      <li>Breached a contract/trust</li>
+                    </ul>
+                    <p className="mt-2">Most traffic tickets fall under the "breach of contract" category. The system presumes you've entered into a contract by using public roads and having a driver's license. Your signature on a ticket is treated as an admission of breach and a promise to remedy the breach (pay the fine or appear in court).</p>
+                  </AccordionContent>
+                </AccordionItem>
+                
+                <AccordionItem value="item-3">
+                  <AccordionTrigger className="text-left">Court Jurisdiction</AccordionTrigger>
+                  <AccordionContent>
+                    <p className="mb-2">Understanding jurisdiction is crucial for successful remedy strategies:</p>
+                    <ul className="list-disc pl-5 space-y-1 text-gray-700">
+                      <li>Traffic Court functions under administrative law, not common law</li>
+                      <li>There's a critical distinction between the public and private capacity of courts</li>
+                      <li>Without the proper jurisdictional challenge, courts presume jurisdiction by your appearance</li>
+                    </ul>
+                    <p className="mt-2">According to the document, "Nothing can happen in 'public' that hasn't happened in 'private' first." This refers to the legal principle that a living human being must witness an act before any official action can be taken.</p>
+                  </AccordionContent>
+                </AccordionItem>
+              </Accordion>
+              
+              <Separator className="my-6" />
+              
+              <h3 className="text-lg font-medium mb-3">Effective Remedy Strategies</h3>
+              <p className="text-gray-700 mb-4">
+                The following strategies are discussed in the Traffic Ticket Remedies guide as potential approaches to address traffic tickets:
+              </p>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                <Card className="border border-gray-200">
+                  <CardHeader className="pb-2">
+                    <CardTitle className="text-md">Right of Rescission</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-sm text-gray-600">
+                      A legal right that allows a person to cancel certain legal contracts within a specific time period (typically 3 business days). Can be used to rescind your signature on traffic tickets under certain conditions.
+                    </p>
+                  </CardContent>
+                </Card>
+                
+                <Card className="border border-gray-200">
+                  <CardHeader className="pb-2">
+                    <CardTitle className="text-md">Name Correction</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-sm text-gray-600">
+                      Uses the legal distinction between your given name and the all-caps name (e.g., JOHN DOE) that appears on legal documents. Filing a proper name correction can separate you from this legal entity.
+                    </p>
+                  </CardContent>
+                </Card>
+                
+                <Card className="border border-gray-200">
+                  <CardHeader className="pb-2">
+                    <CardTitle className="text-md">Challenging Under 15 USC 1692</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-sm text-gray-600">
+                      Since traffic tickets represent alleged contract breaches, debt collection laws can be relevant. Request verification of the debt (the fine) under Fair Debt Collection Practices Act.
+                    </p>
+                  </CardContent>
+                </Card>
+                
+                <Card className="border border-gray-200">
+                  <CardHeader className="pb-2">
+                    <CardTitle className="text-md">Quo Warranto</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <p className="text-sm text-gray-600">
+                      This legal concept challenges the authority of officials to act against you. It formally questions the jurisdiction and authority of the court/officer and requires the plaintiff to prove their authority.
+                    </p>
+                  </CardContent>
+                </Card>
+              </div>
+              
+              <div className="bg-gray-50 p-4 rounded-md">
+                <h4 className="font-medium text-lg mb-2">Legal Concepts Central to Traffic Remedies</h4>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <h5 className="font-medium mb-1">Suretyship</h5>
+                    <p className="text-sm text-gray-600">
+                      In traffic court cases, you may unknowingly become the surety for a legal fiction (your NAME in all caps). Understanding this relationship allows you to separate yourself from the legal entity being charged.
+                    </p>
+                  </div>
+                  
+                  <div>
+                    <h5 className="font-medium mb-1">Abatement</h5>
+                    <p className="text-sm text-gray-600">
+                      A legal procedure that suspends court proceedings due to defects in the process. Can be used when proper procedures haven't been followed or to challenge jurisdictional errors.
+                    </p>
+                  </div>
+                  
+                  <div>
+                    <h5 className="font-medium mb-1">Estate Concepts</h5>
+                    <p className="text-sm text-gray-600">
+                      Your estate includes everything of value that you own. The legal system often treats your NAME as a separate entity from you as a living being. Learning to operate as the executor of your estate rather than the surety can change your legal standing.
+                    </p>
+                  </div>
+                  
+                  <div>
+                    <h5 className="font-medium mb-1">Private vs. Public Distinction</h5>
+                    <p className="text-sm text-gray-600">
+                      A fundamental concept is understanding the difference between your private capacity (you as a living being) and your public capacity (legal name/fiction that is subject to statutory jurisdiction).
+                    </p>
+                  </div>
+                </div>
               </div>
             </CardContent>
           </Card>

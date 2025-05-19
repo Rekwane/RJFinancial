@@ -9,6 +9,7 @@ import Login from "@/pages/Login";
 import Register from "@/pages/Register";
 import CreditRepair from "@/pages/CreditRepair";
 import TrustDocuments from "@/pages/TrustDocuments";
+import TrafficTicketRemedies from "@/pages/TrafficTicketRemedies";
 import EINApplication from "@/pages/EINApplication";
 import StockInvestment from "@/pages/StockInvestment";
 import Documents from "@/pages/Documents";
@@ -38,6 +39,7 @@ function Router() {
             <Route path="/dispute-letters" component={CreditRepair} />
             <Route path="/credit-tips" component={CreditRepair} />
             <Route path="/trust" component={TrustDocuments} />
+            <Route path="/traffic-tickets" component={TrafficTicketRemedies} />
             <Route path="/ein" component={EINApplication} />
             <Route path="/stocks" component={StockInvestment} />
             <Route path="/watchlist" component={StockInvestment} />
