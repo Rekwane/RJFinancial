@@ -1,0 +1,4 @@
+# Enable replication and hosting on Replit's platform
+sync=true
+modules=true
+managed=true
