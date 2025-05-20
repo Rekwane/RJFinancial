@@ -89,6 +89,24 @@ export default function TrustDocuments() {
     setIsGoldMember(false);
   }, []);
   
+  // Handle membership-restricted actions
+  const handleMembershipAction = (action: () => void) => {
+    if (isGoldMember) {
+      action();
+    } else {
+      setShowMembershipModal(true);
+    }
+  };
+  
+  // Handle document submission with membership check
+  const handleTrustSubmission = (data: any, submissionFunction: (data: any) => void) => {
+    if (isGoldMember) {
+      submissionFunction(data);
+    } else {
+      setShowMembershipModal(true);
+    }
+  };
+  
   // Handle editing documents (gold members only)
   const handleDocumentEdit = (templateType: string, templateContent: string) => {
     if (isGoldMember) {
