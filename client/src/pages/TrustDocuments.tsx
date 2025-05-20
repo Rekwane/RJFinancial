@@ -417,6 +417,212 @@ export default function TrustDocuments() {
           </Card>
         </TabsContent>
         
+        <TabsContent value="legal">
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center">
+                <FileText className="mr-2 h-5 w-5" />
+                Legal Document Templates
+              </CardTitle>
+              <CardDescription>
+                Reference legal document templates and guides for trust creation and protection.
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="mb-4 p-4 bg-amber-50 border border-amber-200 rounded-md">
+                <div className="flex items-start">
+                  <AlertTriangle className="mt-1 mr-3 h-5 w-5 text-amber-500" />
+                  <div>
+                    <h4 className="font-medium text-amber-800">Disclaimer</h4>
+                    <p className="text-sm text-amber-700">
+                      These documents are provided for educational and reference purposes only and do not constitute legal advice. 
+                      Always consult with a qualified attorney for specific legal guidance.
+                    </p>
+                  </div>
+                </div>
+              </div>
+              
+              <h3 className="text-lg font-medium mb-4">Trust Protection and Right to Travel Documents</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                <Card className="shadow-sm border border-gray-200">
+                  <CardHeader className="pb-3">
+                    <CardTitle className="text-base flex items-center">
+                      <FileCheck className="h-4 w-4 mr-2" />
+                      IN GOD WE TRUST Motion to Dismiss
+                    </CardTitle>
+                    <CardDescription className="text-xs">
+                      Constitutional rights violation and motion to dismiss with trust property protection
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="pb-3">
+                    <p className="text-sm text-gray-600 mb-2">
+                      This document asserts constitutional rights and trust property protections when facing 
+                      traffic violations. It references key case laws including Marbury v. Madison, 
+                      Murdock v. Pennsylvania, Shuttlesworth v. Birmingham, and others.
+                    </p>
+                    <div className="text-xs text-gray-500 mt-2">
+                      <strong>Key Points:</strong>
+                      <ul className="list-disc pl-4 mt-1 space-y-0.5">
+                        <li>Assertion of constitutional rights to travel freely</li>
+                        <li>Trust property protection from regulatory enforcement</li>
+                        <li>Citations of relevant Supreme Court case law</li>
+                        <li>Clear motion to dismiss format for legal proceedings</li>
+                      </ul>
+                    </div>
+                  </CardContent>
+                  <CardFooter className="pt-0">
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      className="w-full" 
+                      onClick={() => {
+                        setTemplateData({
+                          template: getTrustTemplate("right-to-travel"),
+                          formData: undefined
+                        });
+                        setShowTemplatePreview(true);
+                      }}
+                    >
+                      <FileText className="h-4 w-4 mr-2" />
+                      View Full Document
+                    </Button>
+                  </CardFooter>
+                </Card>
+                
+                <Card className="shadow-sm border border-gray-200">
+                  <CardHeader className="pb-3">
+                    <CardTitle className="text-base flex items-center">
+                      <Car className="h-4 w-4 mr-2" />
+                      Motor Vehicle Affidavit
+                    </CardTitle>
+                    <CardDescription className="text-xs">
+                      Affidavit for non-commercial, religious right to travel, private trust ownership
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="pb-3">
+                    <p className="text-sm text-gray-600 mb-2">
+                      This affidavit declares a vehicle's status as trust property used exclusively for 
+                      non-commercial purposes and asserts religious right to travel protections under 
+                      the First Amendment.
+                    </p>
+                    <div className="text-xs text-gray-500 mt-2">
+                      <strong>Key Declarations:</strong>
+                      <ul className="list-disc pl-4 mt-1 space-y-0.5">
+                        <li>Non-business and non-commercial use of the vehicle</li>
+                        <li>First Amendment religious freedom protection</li>
+                        <li>Private living trust ownership of the vehicle</li>
+                        <li>Exemption from commercial regulations claim</li>
+                      </ul>
+                    </div>
+                  </CardContent>
+                  <CardFooter className="pt-0">
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      className="w-full" 
+                      onClick={() => {
+                        setTemplateData({
+                          template: getTrustTemplate("motor-vehicle-affidavit"),
+                          formData: undefined
+                        });
+                        setShowTemplatePreview(true);
+                      }}
+                    >
+                      <FileText className="h-4 w-4 mr-2" />
+                      View Full Document
+                    </Button>
+                  </CardFooter>
+                </Card>
+              </div>
+              
+              <h3 className="text-lg font-medium mb-4">Trust Creation and Asset Protection</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <Card className="shadow-sm border border-gray-200">
+                  <CardHeader className="pb-3">
+                    <CardTitle className="text-base flex items-center">
+                      <Shield className="h-4 w-4 mr-2" />
+                      Schedule A - Property List Template
+                    </CardTitle>
+                    <CardDescription className="text-xs">
+                      Comprehensive property list for trust asset inventory and protection
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="pb-3">
+                    <p className="text-sm text-gray-600 mb-2">
+                      This exhaustive property list template can be used to document all assets protected 
+                      by the terms and conditions of your trust documents.
+                    </p>
+                    <div className="text-xs text-gray-500 mt-2">
+                      <strong>Asset Categories Include:</strong>
+                      <ul className="list-disc pl-4 mt-1 space-y-0.5">
+                        <li>Real property, land, buildings, and fixed structures</li>
+                        <li>Financial accounts, securities, and monetary instruments</li>
+                        <li>Vehicles, watercraft, and transportation assets</li>
+                        <li>Intellectual property rights and personal data</li>
+                      </ul>
+                    </div>
+                  </CardContent>
+                  <CardFooter className="pt-0">
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      className="w-full" 
+                      onClick={() => {
+                        setTemplateData({
+                          template: getTrustTemplate("schedule-a"),
+                          formData: undefined
+                        });
+                        setShowTemplatePreview(true);
+                      }}
+                    >
+                      <FileText className="h-4 w-4 mr-2" />
+                      View Full Document
+                    </Button>
+                  </CardFooter>
+                </Card>
+                
+                <Card className="shadow-sm border border-gray-200">
+                  <CardHeader className="pb-3">
+                    <CardTitle className="text-base flex items-center">
+                      <FileText className="h-4 w-4 mr-2" />
+                      Declaration of Trust
+                    </CardTitle>
+                    <CardDescription className="text-xs">
+                      Essential foundation document for establishing a living trust
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="pb-3">
+                    <p className="text-sm text-gray-600 mb-2">
+                      This declaration of trust template provides the fundamental structure for establishing 
+                      a living trust, defining the grantor, trustees, beneficiaries, and trust purposes.
+                    </p>
+                    <div className="text-xs text-gray-500 mt-2">
+                      <strong>Key Sections:</strong>
+                      <ul className="list-disc pl-4 mt-1 space-y-0.5">
+                        <li>Trust establishment and declaration of intent</li>
+                        <li>Trustees powers, duties, and succession</li>
+                        <li>Beneficiary designations and distributions</li>
+                        <li>Trust property and certificate protocols</li>
+                      </ul>
+                    </div>
+                  </CardContent>
+                  <CardFooter className="pt-0">
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      className="w-full" 
+                      onClick={() => setShowDeclarationForm(true)}
+                    >
+                      <FilePlus className="h-4 w-4 mr-2" />
+                      Create Document
+                    </Button>
+                  </CardFooter>
+                </Card>
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+        
         <TabsContent value="traffic">
           <Card>
             <CardHeader>
