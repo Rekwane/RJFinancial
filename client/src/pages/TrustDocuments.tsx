@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { TrustForm } from "@/components/trust/TrustForm";
 import { DisputeLetterTemplate } from "@/components/credit-repair/DisputeLetterTemplate";
 import { useQuery } from "@tanstack/react-query";
@@ -80,20 +80,13 @@ export default function TrustDocuments() {
   const [isGoldMember, setIsGoldMember] = useState(false); // For membership status
   const [showMembershipModal, setShowMembershipModal] = useState(false); // For membership upgrade prompt
   const [editableDocument, setEditableDocument] = useState<{ type: string, content: string } | null>(null); // For editable document content
-  
-  // For demo purposes, checking if the user has gold membership
-  // In a real app, this would come from a user profile or auth context
+  const [editedContent, setEditedContent] = useState<string>(""); // For tracking edited document content
+
+  // For demo purposes - in a real app, this would come from a user profile or auth context
   useEffect(() => {
     // Simulate a check for gold membership status
-    // This would be replaced with an actual membership check in production
-    const checkMembership = async () => {
-      // Simulating an API call to check membership status
-      // In a real app: const { data } = await fetch('/api/user/membership')
-      // For demo, we're defaulting to non-gold
-      setIsGoldMember(false);
-    };
-    
-    checkMembership();
+    // For demo, we're defaulting to non-gold
+    setIsGoldMember(false);
   }, []);
   
   // Handle editing documents (gold members only)
@@ -103,6 +96,7 @@ export default function TrustDocuments() {
         type: templateType,
         content: templateContent
       });
+      setEditedContent(templateContent);
     } else {
       setShowMembershipModal(true);
     }
@@ -113,6 +107,11 @@ export default function TrustDocuments() {
     // In a real app, this would save the document to backend storage
     setEditableDocument(null);
     // Show success message or download prompt
+  };
+  
+  // Handle editable document content changes
+  const handleDocumentContentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setEditedContent(e.target.value);
   };
   
   // Set up the form for Declaration of Trust
@@ -628,11 +627,11 @@ export default function TrustDocuments() {
                       </ul>
                     </div>
                   </CardContent>
-                  <CardFooter className="pt-0">
+                  <CardFooter className="pt-0 flex space-x-2">
                     <Button 
                       variant="outline" 
                       size="sm" 
-                      className="w-full" 
+                      className="flex-1" 
                       onClick={() => {
                         setTemplateData({
                           template: getTrustTemplate("schedule-a"),
@@ -642,7 +641,16 @@ export default function TrustDocuments() {
                       }}
                     >
                       <FileText className="h-4 w-4 mr-2" />
-                      View Full Document
+                      View Document
+                    </Button>
+                    <Button
+                      variant="secondary"
+                      size="sm"
+                      className="flex-1"
+                      onClick={() => handleDocumentEdit("Schedule A - Property List", getTrustTemplate("schedule-a"))}
+                    >
+                      <Edit className="h-4 w-4 mr-2" />
+                      Edit Document
                     </Button>
                   </CardFooter>
                 </Card>
@@ -672,15 +680,24 @@ export default function TrustDocuments() {
                       </ul>
                     </div>
                   </CardContent>
-                  <CardFooter className="pt-0">
+                  <CardFooter className="pt-0 flex space-x-2">
                     <Button 
                       variant="outline" 
                       size="sm" 
-                      className="w-full" 
+                      className="flex-1" 
                       onClick={() => setShowDeclarationForm(true)}
                     >
                       <FilePlus className="h-4 w-4 mr-2" />
                       Create Document
+                    </Button>
+                    <Button
+                      variant="secondary"
+                      size="sm"
+                      className="flex-1"
+                      onClick={() => handleDocumentEdit("Declaration of Trust", getLegalTemplate("declaration-of-trust"))}
+                    >
+                      <Edit className="h-4 w-4 mr-2" />
+                      Edit Template
                     </Button>
                   </CardFooter>
                 </Card>
