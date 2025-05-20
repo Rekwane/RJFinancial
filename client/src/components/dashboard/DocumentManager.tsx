@@ -127,7 +127,7 @@ export function DocumentManager() {
     <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
       <div className="md:col-span-2">
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-xl font-bold text-gray-900">Document Manager</h2>
+          <h2 className="text-xl font-bold text-gray-900">RJFinancial Document Manager</h2>
           <Link href="/documents">
             <Button variant="link" className="flex items-center text-primary text-sm font-medium">
               <span>View all documents</span>
@@ -220,7 +220,7 @@ export function DocumentManager() {
       
       <div>
         <div className="flex items-center justify-between mb-4">
-          <h2 className="text-xl font-bold text-gray-900">Credit Tips</h2>
+          <h2 className="text-xl font-bold text-gray-900">RJFinancial Credit Tips</h2>
           <Link href="/credit-tips">
             <Button variant="link" className="flex items-center text-primary text-sm font-medium">
               <span>View all</span>

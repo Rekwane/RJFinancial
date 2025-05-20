@@ -55,7 +55,7 @@ export function NewsFeed() {
   return (
     <div className="mb-6">
       <div className="flex items-center justify-between mb-4">
-        <h2 className="text-xl font-bold text-gray-900">Financial News & Updates</h2>
+        <h2 className="text-xl font-bold text-gray-900">RJFinancial News & Updates</h2>
         <Link href="/news">
           <Button variant="link" className="flex items-center text-primary text-sm font-medium">
             <span>View all news</span>
