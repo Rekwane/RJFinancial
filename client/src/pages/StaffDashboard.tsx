@@ -211,8 +211,8 @@ export default function StaffDashboard() {
   const [activeTab, setActiveTab] = useState("tasks");
   const [selectedTask, setSelectedTask] = useState<ServiceTask | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
-  const [statusFilter, setStatusFilter] = useState<string>("");
-  const [priorityFilter, setPriorityFilter] = useState<string>("");
+  const [statusFilter, setStatusFilter] = useState<string>("all");
+  const [priorityFilter, setPriorityFilter] = useState<string>("all");
   const [openUpdateDialog, setOpenUpdateDialog] = useState(false);
   const [openMessageDialog, setOpenMessageDialog] = useState(false);
   
@@ -246,8 +246,8 @@ export default function StaffDashboard() {
       task.client.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       task.serviceType.toLowerCase().includes(searchQuery.toLowerCase());
       
-    const matchesStatus = statusFilter === "" || task.status === statusFilter;
-    const matchesPriority = priorityFilter === "" || task.priority === priorityFilter;
+    const matchesStatus = statusFilter === "all" || task.status === statusFilter;
+    const matchesPriority = priorityFilter === "all" || task.priority === priorityFilter;
     
     return matchesSearch && matchesStatus && matchesPriority;
   });
@@ -466,7 +466,7 @@ export default function StaffDashboard() {
                       <SelectValue placeholder="All Statuses" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="">All Statuses</SelectItem>
+                      <SelectItem value="all">All Statuses</SelectItem>
                       <SelectItem value="pending">Pending</SelectItem>
                       <SelectItem value="assigned">Assigned</SelectItem>
                       <SelectItem value="in_progress">In Progress</SelectItem>
@@ -480,7 +480,7 @@ export default function StaffDashboard() {
                       <SelectValue placeholder="All Priorities" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="">All Priorities</SelectItem>
+                      <SelectItem value="all">All Priorities</SelectItem>
                       <SelectItem value="low">Low</SelectItem>
                       <SelectItem value="normal">Normal</SelectItem>
                       <SelectItem value="high">High</SelectItem>
