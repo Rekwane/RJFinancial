@@ -191,6 +191,52 @@ export default function TrustDocuments() {
     
     return template;
   }
+
+  // Function to compile the right to travel motion
+  function compileRightToTravelMotion(data: RightToTravelFormValues) {
+    let template = getTrustTemplate("right-to-travel");
+    
+    // Replace placeholders with actual data
+    template = template.replace(/\[OFFICER_NAME\]/g, data.officerName);
+    template = template.replace(/\[COURT_NAME\]/g, data.courtName);
+    template = template.replace(/\[COURT_ADDRESS\]/g, data.courtAddress);
+    template = template.replace(/\[COURT_CITY_STATE_ZIP\]/g, data.courtCityStateZip);
+    template = template.replace(/\[TRUSTEE_NAME\]/g, data.trusteeName);
+    template = template.replace(/\[TRUSTEE_ADDRESS\]/g, data.trusteeAddress);
+    template = template.replace(/\[TRUSTEE_CITY_STATE_ZIP\]/g, data.trusteeCityStateZip);
+    template = template.replace(/\[CURRENT_DATE\]/g, format(new Date(), 'MMMM d, yyyy'));
+    template = template.replace(/\[RECIPIENT_NAME\]/g, data.recipientName);
+    template = template.replace(/\[TRUST_NAME\]/g, data.trustName);
+    template = template.replace(/\[INCIDENT_DATE\]/g, data.incidentDate);
+    template = template.replace(/\[LAW_ENFORCEMENT_AGENCY\]/g, data.lawEnforcementAgency);
+    template = template.replace(/\[ALLEGED_VIOLATION\]/g, data.allegedViolation);
+    template = template.replace(/\[CONTACT_INFORMATION\]/g, data.contactInformation);
+    
+    return template;
+  }
+  
+  // Function to compile the motor vehicle affidavit
+  function compileMotorVehicleAffidavit(data: MotorVehicleAffidavitFormValues) {
+    let template = getTrustTemplate("motor-vehicle-affidavit");
+    
+    // Replace placeholders with actual data
+    template = template.replace(/\[STATE\]/g, data.state);
+    template = template.replace(/\[COUNTY\]/g, data.county);
+    template = template.replace(/\[FULL_NAME\]/g, data.fullName);
+    template = template.replace(/\[VEHICLE_YEAR\]/g, data.vehicleYear);
+    template = template.replace(/\[VEHICLE_MAKE\]/g, data.vehicleMake);
+    template = template.replace(/\[VEHICLE_MODEL\]/g, data.vehicleModel);
+    template = template.replace(/\[VEHICLE_VIN\]/g, data.vehicleVin);
+    template = template.replace(/\[TRUST_NAME\]/g, data.trustName);
+    template = template.replace(/\[ID_NUMBER\]/g, data.idNumber);
+    template = template.replace(/\[ADDRESS\]/g, data.address);
+    template = template.replace(/\[CITY_STATE_ZIP\]/g, data.cityStateZip);
+    template = template.replace(/\[DAY\]/g, format(new Date(), 'd'));
+    template = template.replace(/\[MONTH\]/g, format(new Date(), 'MMMM'));
+    template = template.replace(/\[YEAR\]/g, format(new Date(), 'yyyy'));
+    
+    return template;
+  }
   
   // Handle form submission
   function onSubmit(data: DeclarationOfTrustFormValues) {
