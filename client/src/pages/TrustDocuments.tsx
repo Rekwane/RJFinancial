@@ -3,7 +3,7 @@ import { TrustForm } from "@/components/trust/TrustForm";
 import { DisputeLetterTemplate } from "@/components/credit-repair/DisputeLetterTemplate";
 import { useQuery } from "@tanstack/react-query";
 import { TrustDocument } from "@/types";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import {
   Table,
   TableBody,
@@ -15,7 +15,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { FileText, Shield, Info, GavelIcon, BookOpen, AlertTriangle, FilePlus, Download } from "lucide-react";
+import { FileText, Shield, Info, GavelIcon, BookOpen, AlertTriangle, FilePlus, Download, Car, FileCheck } from "lucide-react";
 import { getTrustTemplate } from "@/lib/trust-templates";
 import { getTrafficRemedyTemplate } from "@/lib/traffic-ticket-templates";
 import { getLegalTemplate } from "@/lib/legal-templates";
@@ -32,7 +32,9 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useForm } from "react-hook-form";
+import { format } from "date-fns";
 import { z } from "zod";
 
 // Define the form schema for Declaration of Trust
@@ -61,9 +63,11 @@ export default function TrustDocuments() {
   const [trafficTemplateType, setTrafficTemplateType] = useState<string | null>(null);
   const [legalTemplateType, setLegalTemplateType] = useState<string | null>(null);
   const [showDeclarationForm, setShowDeclarationForm] = useState(false);
+  const [showRightToTravelForm, setShowRightToTravelForm] = useState(false);
+  const [showMotorVehicleAffidavitForm, setShowMotorVehicleAffidavitForm] = useState(false);
   const [compiledTrustDoc, setCompiledTrustDoc] = useState<string | null>(null);
   
-  // Set up the form
+  // Set up the form for Declaration of Trust
   const declarationForm = useForm<DeclarationOfTrustFormValues>({
     defaultValues: {
       trustName: "",
@@ -76,6 +80,76 @@ export default function TrustDocuments() {
       specificBequests: "",
       childrenAge: "21",
       contingentBeneficiary: ""
+    }
+  });
+  
+  // Right to Travel Motion form schema
+  const rightToTravelSchema = z.object({
+    officerName: z.string().min(1, { message: "Officer name is required" }),
+    courtName: z.string().min(1, { message: "Court name is required" }),
+    courtAddress: z.string().min(1, { message: "Court address is required" }),
+    courtCityStateZip: z.string().min(1, { message: "City, State, ZIP is required" }),
+    trusteeName: z.string().min(1, { message: "Trustee name is required" }),
+    trusteeAddress: z.string().min(1, { message: "Trustee address is required" }),
+    trusteeCityStateZip: z.string().min(1, { message: "City, State, ZIP is required" }),
+    recipientName: z.string().min(1, { message: "Recipient name is required" }),
+    trustName: z.string().min(1, { message: "Trust name is required" }),
+    incidentDate: z.string().min(1, { message: "Incident date is required" }),
+    lawEnforcementAgency: z.string().min(1, { message: "Law enforcement agency is required" }),
+    allegedViolation: z.string().min(1, { message: "Alleged violation is required" }),
+    contactInformation: z.string()
+  });
+
+  type RightToTravelFormValues = z.infer<typeof rightToTravelSchema>;
+  
+  const rightToTravelForm = useForm<RightToTravelFormValues>({
+    defaultValues: {
+      officerName: "",
+      courtName: "",
+      courtAddress: "",
+      courtCityStateZip: "",
+      trusteeName: "",
+      trusteeAddress: "",
+      trusteeCityStateZip: "",
+      recipientName: "",
+      trustName: "",
+      incidentDate: "",
+      lawEnforcementAgency: "",
+      allegedViolation: "",
+      contactInformation: ""
+    }
+  });
+  
+  // Motor Vehicle Affidavit form schema
+  const motorVehicleAffidavitSchema = z.object({
+    state: z.string().min(1, { message: "State is required" }),
+    county: z.string().min(1, { message: "County is required" }),
+    fullName: z.string().min(1, { message: "Full name is required" }),
+    vehicleYear: z.string().min(1, { message: "Vehicle year is required" }),
+    vehicleMake: z.string().min(1, { message: "Vehicle make is required" }),
+    vehicleModel: z.string().min(1, { message: "Vehicle model is required" }),
+    vehicleVin: z.string().min(1, { message: "VIN is required" }),
+    trustName: z.string().min(1, { message: "Trust name is required" }),
+    idNumber: z.string(),
+    address: z.string().min(1, { message: "Address is required" }),
+    cityStateZip: z.string().min(1, { message: "City, State, ZIP is required" })
+  });
+
+  type MotorVehicleAffidavitFormValues = z.infer<typeof motorVehicleAffidavitSchema>;
+  
+  const motorVehicleAffidavitForm = useForm<MotorVehicleAffidavitFormValues>({
+    defaultValues: {
+      state: "",
+      county: "",
+      fullName: "",
+      vehicleYear: "",
+      vehicleMake: "",
+      vehicleModel: "",
+      vehicleVin: "",
+      trustName: "",
+      idNumber: "",
+      address: "",
+      cityStateZip: ""
     }
   });
   

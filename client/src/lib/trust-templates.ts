@@ -152,10 +152,137 @@ All e-mail addresses and equity/value associated therewith;
 All other property belonging to DEBTOR not previously mentioned.
 `;
 
+export const RIGHT_TO_TRAVEL_TEMPLATE = `
+IN GOD WE TRUST
+
+Constitutional Rights Violation and Motion to Dismiss
+
+To: [OFFICER_NAME][COURT_NAME][COURT_ADDRESS][COURT_CITY_STATE_ZIP]
+
+From: [TRUSTEE_NAME], Trustee[TRUSTEE_ADDRESS][TRUSTEE_CITY_STATE_ZIP]
+
+Date: [CURRENT_DATE]
+
+Subject: Assertion of Constitutional Rights, Trust Property Protection, and Motion to Dismiss Charges
+
+Notice to Agent is Notice to Principal and Notice to Principal is Notice to Agent
+
+
+
+Dear [RECIPIENT_NAME],
+
+I, [TRUSTEE_NAME], Trustee and beneficiary of the [TRUST_NAME], a sovereign individual and citizen of the United States of America, hereby assert my God-given and constitutionally protected rights to travel freely and unencumbered as guaranteed by the U.S. Constitution. This notice is to inform you of the constitutional violations that have occurred in the enforcement actions taken against me and to request the immediate dismissal of all charges related to my right to travel.
+
+Constitutional Basis
+
+Supremacy Clause (Article VI, Clause 2)
+
+"This Constitution, and the Laws of the United States which shall be made in Pursuance thereof; and all Treaties made, or which shall be made, under the Authority of the United States, shall be the supreme Law of the Land; and the Judges in every State shall be bound thereby, any Thing in the Constitution or Laws of any State to the Contrary notwithstanding."
+
+Case Law Supporting the Right to Travel and Trust Protections
+
+Marbury v. Madison, 5 U.S. 137 (1803): Any law repugnant to the Constitution is void.
+
+Murdock v. Pennsylvania, 319 U.S. 105 (1943): No state may convert a secured liberty into a privilege, issue a license, and charge a fee for it.
+
+Shuttlesworth v. City of Birmingham, 373 U.S. 262 (1963): If a state converts a right into a privilege, the citizen may ignore the license and fee and exercise the right with impunity.
+
+Kent v. Dulles, 357 U.S. 116 (1958): The right to travel is a part of the liberty of which a citizen cannot be deprived without due process of law.
+
+Thompson v. Smith, 154 SE 579 (1930): The right of a citizen to travel upon the public highways and to transport his property thereon by horse-drawn carriage, wagon, or automobile is not a mere privilege which may be permitted or prohibited at will, but a common right which he has under his right to life, liberty, and the pursuit of happiness.
+
+Statement of Facts
+
+On [INCIDENT_DATE], I was pulled over by Officer [OFFICER_NAME] of [LAW_ENFORCEMENT_AGENCY] for allegedly [ALLEGED_VIOLATION]. The vehicle in question is legally registered under the [TRUST_NAME]. The charges brought against me are in direct violation of my constitutional rights and the protections afforded to trust property as outlined below.
+
+Detailed Argument
+
+1. Right to Travel Freely and Unencumbered
+
+The right to travel freely and unencumbered is a fundamental right guaranteed by the Constitution and supported by case law. As per Kent v. Dulles and Thompson v. Smith, this right cannot be arbitrarily restricted by the state through the imposition of registration tags, license plates, or driver's licenses.
+
+2. Protection of Trust Property
+
+The vehicle in question is registered under the [TRUST_NAME]. As such, it is trust property and is protected by the terms and conditions of the trust agreement. The state has no authority to impose its statutory requirements on trust property without a valid contract.
+
+Relief Requested
+
+1. Immediate Dismissal of All Charges
+
+Based on the aforementioned constitutional protections, trust property protections, and case laws, I request the immediate dismissal of all charges related to the alleged violations.
+
+2. Cease and Desist Order
+
+An order directing [LAW_ENFORCEMENT_AGENCY] and its officers to cease and desist from any further enforcement actions that violate my constitutional right to travel freely and unencumbered and infringe upon the property rights of the [TRUST_NAME].
+
+Affirmation
+
+I affirm that the statements made in this notice are true and correct to the best of my knowledge and belief. I am prepared to defend these rights in a court of law and seek any further necessary legal remedies.
+
+Respectfully,
+
+[TRUSTEE_NAME]
+[SIGNATURE]
+[CONTACT_INFORMATION]
+`;
+
+export const MOTOR_VEHICLE_AFFIDAVIT_TEMPLATE = `
+MOTOR VEHICLE AFFIDAVIT
+
+State of [STATE]
+County of [COUNTY]
+
+Affidavit of Non-Business, Non-Commercial Use, Right to Travel, Religious Right Protected by the First Amendment, and Private Living Trust Ownership
+
+I, [FULL_NAME], being of sound mind and legal age, do hereby affirm the following under penalty of perjury:
+
+Vehicle Description:
+Year: [VEHICLE_YEAR]
+Make: [VEHICLE_MAKE]
+Model: [VEHICLE_MODEL]
+Vehicle Identification Number (VIN): [VEHICLE_VIN]
+
+Purpose of Vehicle Use:
+I affirm that the above-described vehicle is used exclusively for personal, non-business, and non-commercial purposes. This vehicle is not used for any activity related to trade, commerce, or business.
+
+Right to Travel as a Religious Right:
+I further affirm that I am exercising my God-given, constitutionally protected right to travel freely within the United States of America. This right is granted by God and is an integral part of my religious beliefs and practices. As such, it is protected by the First Amendment to the United States Constitution, which guarantees the free exercise of religion. The use of this vehicle is strictly for the purpose of exercising this religious right to travel.
+
+Ownership by Private Living Trust:
+I hereby declare that the above-described vehicle is held within a private living trust, known as [TRUST_NAME], established under the laws of the State of [STATE]. The vehicle is a trust asset, and all rights, titles, and interests in the vehicle are vested in the trust for the benefit of its beneficiaries. The vehicle is operated by the trustee(s) or the trust's designated agent(s) solely for the trust's non-commercial and religious purposes.
+
+Exemption from Commercial Regulations:
+Given the non-commercial and religious nature of this vehicle and its ownership by a private living trust, I assert that it should not be subject to laws and regulations that apply exclusively to commercial vehicles, including, but not limited to, commercial licensing, registration, or insurance requirements intended for business vehicles.
+
+Statement of Truth:
+I certify that the information provided in this affidavit is true, correct, and complete to the best of my knowledge and belief. I understand that any false statements made herein are subject to penalties under the laws of the United States and the State of [STATE].
+
+Dated this [DAY] day of [MONTH], [YEAR].
+
+Signature: _________________________
+Printed Name: [FULL_NAME]
+Driver's License or ID Number: [ID_NUMBER]
+Address: [ADDRESS]
+City, State, Zip: [CITY_STATE_ZIP]
+
+Notary Public
+
+Subscribed and sworn to before me, a Notary Public, in and for the State of [STATE], County of [COUNTY], this [DAY] day of [MONTH], [YEAR].
+
+Notary Signature: ___________________________
+Notary Printed Name: ___________________________
+My Commission Expires: ___________________________
+Notary Seal:
+`;
+
 export const getTrustTemplate = (type: string) => {
   switch (type) {
     case 'schedule-a':
       return SCHEDULE_A_TEMPLATE;
+    case 'right-to-travel':
+      return RIGHT_TO_TRAVEL_TEMPLATE;
+    case 'motor-vehicle-affidavit':
+      return MOTOR_VEHICLE_AFFIDAVIT_TEMPLATE;
     default:
       return '';
   }
