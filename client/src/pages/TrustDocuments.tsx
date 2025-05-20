@@ -557,8 +557,17 @@ export default function TrustDocuments() {
                       className="flex-1"
                       onClick={() => handleDocumentEdit("Right to Travel Motion", getTrustTemplate("right-to-travel"))}
                     >
-                      <Edit className="h-4 w-4 mr-2" />
-                      Edit Document
+                      {isGoldMember ? (
+                        <>
+                          <Edit className="h-4 w-4 mr-2" />
+                          Edit Document
+                        </>
+                      ) : (
+                        <>
+                          <Lock className="h-4 w-4 mr-2" />
+                          Premium Feature
+                        </>
+                      )}
                     </Button>
                   </CardFooter>
                 </Card>
@@ -611,8 +620,17 @@ export default function TrustDocuments() {
                       className="flex-1"
                       onClick={() => handleDocumentEdit("Motor Vehicle Affidavit", getTrustTemplate("motor-vehicle-affidavit"))}
                     >
-                      <Edit className="h-4 w-4 mr-2" />
-                      Edit Document
+                      {isGoldMember ? (
+                        <>
+                          <Edit className="h-4 w-4 mr-2" />
+                          Edit Document
+                        </>
+                      ) : (
+                        <>
+                          <Lock className="h-4 w-4 mr-2" />
+                          Premium Feature
+                        </>
+                      )}
                     </Button>
                   </CardFooter>
                 </Card>
