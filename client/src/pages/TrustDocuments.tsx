@@ -78,20 +78,46 @@ export default function TrustDocuments() {
   const [showMotorVehicleAffidavitForm, setShowMotorVehicleAffidavitForm] = useState(false);
   const [compiledTrustDoc, setCompiledTrustDoc] = useState<string | null>(null);
   const [isGoldMember, setIsGoldMember] = useState(false); // For membership status
+  const [isAdmin, setIsAdmin] = useState(false); // For admin override
   const [showMembershipModal, setShowMembershipModal] = useState(false); // For membership upgrade prompt
   const [editableDocument, setEditableDocument] = useState<{ type: string, content: string } | null>(null); // For editable document content
   const [editedContent, setEditedContent] = useState<string>(""); // For tracking edited document content
 
   // For demo purposes - in a real app, this would come from a user profile or auth context
   useEffect(() => {
-    // Simulate a check for gold membership status
+    // Simulate a check for gold membership status and admin role
     // For demo, we're defaulting to non-gold
-    setIsGoldMember(false);
+    
+    // Check if the current user has admin privileges (in a real app, this would check auth context)
+    const checkAdminStatus = () => {
+      // This simulates checking for admin in URL parameters for easy testing
+      const urlParams = new URLSearchParams(window.location.search);
+      const adminParam = urlParams.get('admin');
+      
+      // Set admin status to true if admin parameter exists and equals "true"
+      return adminParam === "true";
+    };
+    
+    // Set admin status
+    const adminStatus = checkAdminStatus();
+    setIsAdmin(adminStatus);
+    
+    // If admin, they automatically have access to all features
+    if (adminStatus) {
+      console.log("Admin access granted - all features available");
+    } else {
+      setIsGoldMember(false);
+    }
   }, []);
+  
+  // Helper function to check if user has access (either admin or gold member)
+  const hasAccess = () => {
+    return isAdmin || isGoldMember;
+  };
   
   // Handle membership-restricted actions
   const handleMembershipAction = (action: () => void) => {
-    if (isGoldMember) {
+    if (hasAccess()) {
       action();
     } else {
       setShowMembershipModal(true);
@@ -100,16 +126,16 @@ export default function TrustDocuments() {
   
   // Handle document submission with membership check
   const handleTrustSubmission = (data: any, submissionFunction: (data: any) => void) => {
-    if (isGoldMember) {
+    if (hasAccess()) {
       submissionFunction(data);
     } else {
       setShowMembershipModal(true);
     }
   };
   
-  // Handle editing documents (gold members only)
+  // Handle editing documents (gold members and admins only)
   const handleDocumentEdit = (templateType: string, templateContent: string) => {
-    if (isGoldMember) {
+    if (hasAccess()) {
       setEditableDocument({
         type: templateType,
         content: templateContent
@@ -733,7 +759,7 @@ export default function TrustDocuments() {
                       onClick={() => setShowDeclarationForm(true)}
                     >
                       <FilePlus className="h-4 w-4 mr-2" />
-                      {isGoldMember ? "Create Document" : "Start Process"}
+                      {hasAccess() ? "Create Document" : "Start Process"}
                     </Button>
                     <Button
                       variant="secondary"
@@ -741,7 +767,7 @@ export default function TrustDocuments() {
                       className="flex-1"
                       onClick={() => handleDocumentEdit("Declaration of Trust", getLegalTemplate("declaration-of-trust"))}
                     >
-                      {isGoldMember ? (
+                      {hasAccess() ? (
                         <>
                           <Edit className="h-4 w-4 mr-2" />
                           Edit Template
