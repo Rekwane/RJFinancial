@@ -45,6 +45,36 @@ export default function Dashboard() {
   
   return (
     <div className="container mx-auto">
+      {/* Dedication Section */}
+      <div className="mb-8 bg-gradient-to-r from-blue-50 to-indigo-50 p-6 rounded-lg shadow-sm border border-blue-100">
+        <div className="flex flex-col md:flex-row items-center gap-6">
+          <div className="md:w-1/3 flex justify-center">
+            <div className="relative">
+              <img 
+                src="src/assets/dedication_son.png" 
+                alt="In memory of Rayjay" 
+                className="rounded-lg shadow-md h-64 object-contain"
+              />
+              <div className="absolute inset-0 rounded-lg shadow-inner border border-white/20"></div>
+            </div>
+          </div>
+          <div className="md:w-2/3">
+            <h2 className="text-2xl font-bold text-gray-800 mb-3">In Loving Memory of Rayjay</h2>
+            <p className="text-gray-700 mb-4">
+              RJFinancial was founded in memory of my beloved son, Rayjay. His bright spirit and kind heart continue to inspire us every day. 
+              This platform is dedicated to his memory and carries his initials as our company name.
+            </p>
+            <p className="text-gray-700 mb-4">
+              Through RJFinancial, we aim to help thousands of families achieve financial freedom and security.
+              Each person we help is a testament to Rayjay's lasting impact on this world.
+            </p>
+            <p className="text-gray-600 italic">
+              "Because of one child, many lives will be changed for the better."
+            </p>
+          </div>
+        </div>
+      </div>
+
       <div className="mb-6">
         <h1 className="text-2xl font-bold text-gray-900">RJFinancial Dashboard</h1>
         <p className="text-gray-600 mt-1">Welcome back, John! Here's your financial overview.</p>
