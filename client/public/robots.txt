@@ -1,0 +1,11 @@
+# robots.txt for rjfinancial.com
+User-agent: *
+Allow: /
+
+# Disallow sensitive areas
+Disallow: /api/
+Disallow: /admin/
+Disallow: /private/
+
+# Sitemaps
+Sitemap: https://rjfinancial.com/sitemap.xml

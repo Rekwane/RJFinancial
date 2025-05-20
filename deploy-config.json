@@ -1,0 +1,39 @@
+{
+  "app": {
+    "name": "RJFinancial",
+    "version": "1.0.0",
+    "environment": "production"
+  },
+  "server": {
+    "port": 5000,
+    "host": "0.0.0.0",
+    "timeoutMs": 120000
+  },
+  "security": {
+    "sslEnabled": true,
+    "sslCertDir": "/etc/ssl/rjfinancial",
+    "securityHeaders": true,
+    "rateLimiting": true,
+    "corsEnabled": true
+  },
+  "database": {
+    "runMigrations": true,
+    "connectionTimeout": 30000,
+    "queryTimeout": 10000
+  },
+  "features": {
+    "userAuth": true,
+    "mfa": true,
+    "stripe": true,
+    "trustDocuments": true,
+    "creditRepair": true,
+    "einApplications": true,
+    "stockTracking": true,
+    "serviceTracking": true
+  },
+  "monitoring": {
+    "enabled": true,
+    "errorLogging": true,
+    "performanceMetrics": true
+  }
+}
