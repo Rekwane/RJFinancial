@@ -1,7 +1,8 @@
 import { Link, useLocation } from "wouter";
 import {
   BarChart, CreditCard, File, FileText, Folder, 
-  Heart, IdCard, Lightbulb, Mail, ShieldAlert, TrendingUp, Eye, BellRing
+  Heart, IdCard, Lightbulb, Mail, ShieldAlert, TrendingUp, Eye, BellRing,
+  ClipboardCheck, Users
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -87,6 +88,22 @@ export function Sidebar() {
                 icon={<Eye className="h-5 w-5" />} 
                 label="Watchlist" 
                 isActive={location === "/watchlist"}
+              />
+            </NavSection>
+
+            {/* Services Section */}
+            <NavSection title="Services">
+              <NavLink 
+                href="/service-tracking" 
+                icon={<ClipboardCheck className="h-5 w-5" />} 
+                label="Service Tracking" 
+                isActive={location === "/service-tracking"}
+              />
+              <NavLink 
+                href="/staff-dashboard" 
+                icon={<Users className="h-5 w-5" />} 
+                label="Staff Dashboard" 
+                isActive={location === "/staff-dashboard"}
               />
             </NavSection>
 

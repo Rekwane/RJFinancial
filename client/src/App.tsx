@@ -17,6 +17,8 @@ import FinancialNews from "@/pages/FinancialNews";
 import NotificationsPage from "@/pages/NotificationsPage";
 import DisputeLettersPage from "@/pages/DisputeLettersPage";
 import CreditTipsPage from "@/pages/CreditTipsPage";
+import ServiceTracking from "@/pages/ServiceTracking";
+import StaffDashboard from "@/pages/StaffDashboard";
 import { Header } from "@/components/layout/Header";
 import { Sidebar } from "@/components/layout/Sidebar";
 import { useState, useEffect } from "react";
@@ -48,6 +50,8 @@ function Router() {
             <Route path="/documents" component={Documents} />
             <Route path="/news" component={FinancialNews} />
             <Route path="/notifications" component={NotificationsPage} />
+            <Route path="/service-tracking" component={ServiceTracking} />
+            <Route path="/staff-dashboard" component={StaffDashboard} />
             {/* Fallback to 404 */}
             <Route component={NotFound} />
           </Switch>
