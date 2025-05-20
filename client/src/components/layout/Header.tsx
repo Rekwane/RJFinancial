@@ -51,7 +51,7 @@ export function Header() {
             </button>
             <Link href="/dashboard" className="flex items-center space-x-2">
               <Shield className="h-6 w-6 text-primary" />
-              <span className="text-xl font-bold text-gray-800 hidden md:inline-block">FinancialAI</span>
+              <span className="text-xl font-bold text-gray-800 hidden md:inline-block">RJFinancial</span>
             </Link>
           </div>
           

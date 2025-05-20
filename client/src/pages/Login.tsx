@@ -84,7 +84,7 @@ export default function Login() {
         <div className="flex justify-center mb-8">
           <div className="flex items-center space-x-2">
             <Shield className="h-10 w-10 text-primary" />
-            <span className="text-3xl font-bold text-gray-800">FinancialAI</span>
+            <span className="text-3xl font-bold text-gray-800">RJFinancial</span>
           </div>
         </div>
         
