@@ -1,4 +1,4 @@
-import { Router, type Express, Request, Response } from "express";
+import { Router, type Express, Request, Response, json } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import bcrypt from "bcrypt";
@@ -16,8 +16,62 @@ import {
   insertDisputeLetterTemplateSchema
 } from "@shared/schema";
 import { ZodError } from "zod";
+import { setupAuth, isAuthenticated } from "./auth";
+import apiRoutes from "./routes/index";
+import helmet from "helmet";
+import cors from "cors";
+import rateLimit from "express-rate-limit";
+import * as https from "https";
+import * as fs from "fs";
+import * as path from "path";
 
 export async function registerRoutes(app: Express): Promise<Server> {
+  // Security middleware
+  app.use(helmet()); // Set security headers
+  app.use(cors()); // Configure CORS as needed
+  
+  // Rate limiting for API endpoints
+  const apiLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 100, // Limit each IP to 100 requests per window
+    standardHeaders: true,
+    legacyHeaders: false,
+  });
+  
+  // Apply rate limiting to API routes
+  app.use("/api", apiLimiter);
+  
+  // Setup authentication
+  await setupAuth(app);
+  
+  // Register new secure API routes
+  app.use("/api", apiRoutes);
+  
+  // Create and configure server (HTTP or HTTPS)
+  let server: Server;
+  
+  // Use HTTPS in production if certificates are available
+  if (process.env.NODE_ENV === "production" && 
+      process.env.SSL_KEY_PATH && 
+      process.env.SSL_CERT_PATH && 
+      fs.existsSync(process.env.SSL_KEY_PATH) && 
+      fs.existsSync(process.env.SSL_CERT_PATH)) {
+    
+    const options = {
+      key: fs.readFileSync(process.env.SSL_KEY_PATH),
+      cert: fs.readFileSync(process.env.SSL_CERT_PATH)
+    };
+    
+    server = https.createServer(options, app);
+    console.log("Server running with HTTPS");
+  } else {
+    server = createServer(app);
+    if (process.env.NODE_ENV === "production") {
+      console.warn("Running in production without HTTPS. This is not recommended.");
+    }
+  }
+  
+  // Legacy API routes - these will eventually be migrated to the new secure routes
   const apiRouter = Router();
   
   // Error handling middleware for Zod validation

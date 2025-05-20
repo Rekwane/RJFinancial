@@ -15,10 +15,10 @@ import jwt from "jsonwebtoken";
 import crypto from "crypto";
 
 // Local strategy setup for regular username/password login
-passport.use('local', new passport.Strategy.LocalStrategy({
+passport.use('local', new (require('passport-local').Strategy)({
   usernameField: 'email',
   passwordField: 'password'
-}, async (email, password, done) => {
+}, async (email: string, password: string, done: any) => {
   try {
     const [user] = await db.select().from(schema.users).where(eq(schema.users.email, email));
     
