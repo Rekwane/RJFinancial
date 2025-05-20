@@ -9,6 +9,10 @@ import rateLimit from "express-rate-limit";
 // Initialize Express application
 const app = express();
 
+// Set trusted proxy for proper IP detection behind load balancers
+// This is required for Replit's environment and for rate limiting to work properly
+app.set('trust proxy', 1);
+
 // Apply security middleware
 app.use(helmet()); // Set secure HTTP headers
 app.use(cors());   // Enable CORS for cross-origin requests
