@@ -2,6 +2,13 @@ import { pgTable, text, serial, integer, timestamp, boolean, jsonb, primaryKey, 
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
+// Sessions - for secure login sessions
+export const sessions = pgTable("sessions", {
+  sid: varchar("sid").primaryKey(),
+  sess: jsonb("sess").notNull(),
+  expire: timestamp("expire").notNull(),
+});
+
 // User schema
 export const users = pgTable("users", {
   id: serial("id").primaryKey(),
@@ -9,10 +16,71 @@ export const users = pgTable("users", {
   password: text("password").notNull(),
   fullName: text("full_name").notNull(),
   email: text("email").notNull().unique(),
+  phoneNumber: text("phone_number"),
+  isEmailVerified: boolean("is_email_verified").default(false),
+  isPhoneVerified: boolean("is_phone_verified").default(false),
+  mfaEnabled: boolean("mfa_enabled").default(false),
+  mfaSecret: text("mfa_secret"),
+  resetPasswordToken: text("reset_password_token"),
+  resetPasswordExpires: timestamp("reset_password_expires"),
+  lastLoginAt: timestamp("last_login_at"),
+  stripeCustomerId: text("stripe_customer_id"),
+  membershipLevel: text("membership_level").default("standard"), // standard, gold, etc.
+  membershipExpires: timestamp("membership_expires"),
+  profileImageUrl: text("profile_image_url"),
+  isActive: boolean("is_active").default(true),
   createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
 });
 
 export const insertUserSchema = createInsertSchema(users).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+  lastLoginAt: true,
+  resetPasswordToken: true,
+  resetPasswordExpires: true,
+  mfaSecret: true,
+  stripeCustomerId: true,
+  membershipExpires: true,
+});
+
+// Billing Information schema
+export const billingInfo = pgTable("billing_info", {
+  id: serial("id").primaryKey(),
+  userId: integer("user_id").notNull(),
+  firstName: text("first_name").notNull(),
+  lastName: text("last_name").notNull(),
+  address1: text("address1").notNull(),
+  address2: text("address2"),
+  city: text("city").notNull(),
+  state: text("state").notNull(),
+  zipCode: text("zip_code").notNull(),
+  country: text("country").notNull().default("US"),
+  paymentMethodId: text("payment_method_id"), // Stripe payment method ID
+  isDefault: boolean("is_default").default(true),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+export const insertBillingInfoSchema = createInsertSchema(billingInfo).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+// MFA Verification schema
+export const mfaVerifications = pgTable("mfa_verifications", {
+  id: serial("id").primaryKey(),
+  userId: integer("user_id").notNull(),
+  verificationType: text("verification_type").notNull(), // email, sms
+  verificationCode: text("verification_code").notNull(),
+  expiresAt: timestamp("expires_at").notNull(),
+  isVerified: boolean("is_verified").default(false),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+export const insertMfaVerificationSchema = createInsertSchema(mfaVerifications).omit({
   id: true,
   createdAt: true,
 });
@@ -334,3 +402,54 @@ export type InsertProgressUpdate = z.infer<typeof insertProgressUpdateSchema>;
 
 export type ServiceComment = typeof serviceComments.$inferSelect;
 export type InsertServiceComment = z.infer<typeof insertServiceCommentSchema>;
+
+export type BillingInfo = typeof billingInfo.$inferSelect;
+export type InsertBillingInfo = z.infer<typeof insertBillingInfoSchema>;
+
+export type MfaVerification = typeof mfaVerifications.$inferSelect;
+export type InsertMfaVerification = z.infer<typeof insertMfaVerificationSchema>;
+
+// Secure Payments and Transaction Tracking
+export const transactions = pgTable("transactions", {
+  id: serial("id").primaryKey(),
+  userId: integer("user_id").notNull(),
+  transactionType: text("transaction_type").notNull(), // subscription, service_purchase, etc.
+  amount: integer("amount").notNull(), // in cents
+  currency: text("currency").notNull().default("usd"),
+  status: text("status").notNull(), // pending, completed, failed, refunded
+  stripePaymentIntentId: text("stripe_payment_intent_id"),
+  stripeSessionId: text("stripe_session_id"),
+  serviceId: integer("service_id"), // optional reference to a purchased service
+  description: text("description"),
+  metadata: jsonb("metadata"),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
+
+export const insertTransactionSchema = createInsertSchema(transactions).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export type Transaction = typeof transactions.$inferSelect;
+export type InsertTransaction = z.infer<typeof insertTransactionSchema>;
+
+// Audit Log for security tracking
+export const auditLogs = pgTable("audit_logs", {
+  id: serial("id").primaryKey(),
+  userId: integer("user_id"),
+  action: text("action").notNull(), // login, logout, password_change, etc.
+  ipAddress: text("ip_address"),
+  userAgent: text("user_agent"),
+  details: jsonb("details"),
+  createdAt: timestamp("created_at").defaultNow(),
+});
+
+export const insertAuditLogSchema = createInsertSchema(auditLogs).omit({
+  id: true,
+  createdAt: true,
+});
+
+export type AuditLog = typeof auditLogs.$inferSelect;
+export type InsertAuditLog = z.infer<typeof insertAuditLogSchema>;
