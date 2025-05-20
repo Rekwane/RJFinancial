@@ -15,7 +15,18 @@ import {
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { FileText, Shield, Info, GavelIcon, BookOpen, AlertTriangle, FilePlus, Download, Car, FileCheck } from "lucide-react";
+import { 
+  FileText, Shield, Info, GavelIcon, BookOpen, AlertTriangle, FilePlus, 
+  Download, Car, FileCheck, Save, Crown, Edit, Lock
+} from "lucide-react";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { getTrustTemplate } from "@/lib/trust-templates";
 import { getTrafficRemedyTemplate } from "@/lib/traffic-ticket-templates";
 import { getLegalTemplate } from "@/lib/legal-templates";
@@ -66,6 +77,43 @@ export default function TrustDocuments() {
   const [showRightToTravelForm, setShowRightToTravelForm] = useState(false);
   const [showMotorVehicleAffidavitForm, setShowMotorVehicleAffidavitForm] = useState(false);
   const [compiledTrustDoc, setCompiledTrustDoc] = useState<string | null>(null);
+  const [isGoldMember, setIsGoldMember] = useState(false); // For membership status
+  const [showMembershipModal, setShowMembershipModal] = useState(false); // For membership upgrade prompt
+  const [editableDocument, setEditableDocument] = useState<{ type: string, content: string } | null>(null); // For editable document content
+  
+  // For demo purposes, checking if the user has gold membership
+  // In a real app, this would come from a user profile or auth context
+  useEffect(() => {
+    // Simulate a check for gold membership status
+    // This would be replaced with an actual membership check in production
+    const checkMembership = async () => {
+      // Simulating an API call to check membership status
+      // In a real app: const { data } = await fetch('/api/user/membership')
+      // For demo, we're defaulting to non-gold
+      setIsGoldMember(false);
+    };
+    
+    checkMembership();
+  }, []);
+  
+  // Handle editing documents (gold members only)
+  const handleDocumentEdit = (templateType: string, templateContent: string) => {
+    if (isGoldMember) {
+      setEditableDocument({
+        type: templateType,
+        content: templateContent
+      });
+    } else {
+      setShowMembershipModal(true);
+    }
+  };
+  
+  // Save edited document
+  const handleSaveDocument = () => {
+    // In a real app, this would save the document to backend storage
+    setEditableDocument(null);
+    // Show success message or download prompt
+  };
   
   // Set up the form for Declaration of Trust
   const declarationForm = useForm<DeclarationOfTrustFormValues>({
@@ -470,11 +518,11 @@ export default function TrustDocuments() {
                       </ul>
                     </div>
                   </CardContent>
-                  <CardFooter className="pt-0">
+                  <CardFooter className="pt-0 flex space-x-2">
                     <Button 
                       variant="outline" 
                       size="sm" 
-                      className="w-full" 
+                      className="flex-1" 
                       onClick={() => {
                         setTemplateData({
                           template: getTrustTemplate("right-to-travel"),
@@ -484,7 +532,16 @@ export default function TrustDocuments() {
                       }}
                     >
                       <FileText className="h-4 w-4 mr-2" />
-                      View Full Document
+                      View Document
+                    </Button>
+                    <Button
+                      variant="secondary"
+                      size="sm"
+                      className="flex-1"
+                      onClick={() => handleDocumentEdit("Right to Travel Motion", getTrustTemplate("right-to-travel"))}
+                    >
+                      <Edit className="h-4 w-4 mr-2" />
+                      Edit Document
                     </Button>
                   </CardFooter>
                 </Card>
@@ -515,11 +572,11 @@ export default function TrustDocuments() {
                       </ul>
                     </div>
                   </CardContent>
-                  <CardFooter className="pt-0">
+                  <CardFooter className="pt-0 flex space-x-2">
                     <Button 
                       variant="outline" 
                       size="sm" 
-                      className="w-full" 
+                      className="flex-1" 
                       onClick={() => {
                         setTemplateData({
                           template: getTrustTemplate("motor-vehicle-affidavit"),
@@ -529,7 +586,16 @@ export default function TrustDocuments() {
                       }}
                     >
                       <FileText className="h-4 w-4 mr-2" />
-                      View Full Document
+                      View Document
+                    </Button>
+                    <Button
+                      variant="secondary"
+                      size="sm"
+                      className="flex-1"
+                      onClick={() => handleDocumentEdit("Motor Vehicle Affidavit", getTrustTemplate("motor-vehicle-affidavit"))}
+                    >
+                      <Edit className="h-4 w-4 mr-2" />
+                      Edit Document
                     </Button>
                   </CardFooter>
                 </Card>
