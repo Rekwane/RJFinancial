@@ -685,8 +685,17 @@ export default function TrustDocuments() {
                       className="flex-1"
                       onClick={() => handleDocumentEdit("Schedule A - Property List", getTrustTemplate("schedule-a"))}
                     >
-                      <Edit className="h-4 w-4 mr-2" />
-                      Edit Document
+                      {isGoldMember ? (
+                        <>
+                          <Edit className="h-4 w-4 mr-2" />
+                          Edit Document
+                        </>
+                      ) : (
+                        <>
+                          <Lock className="h-4 w-4 mr-2" />
+                          Premium Feature
+                        </>
+                      )}
                     </Button>
                   </CardFooter>
                 </Card>
@@ -724,7 +733,7 @@ export default function TrustDocuments() {
                       onClick={() => setShowDeclarationForm(true)}
                     >
                       <FilePlus className="h-4 w-4 mr-2" />
-                      Create Document
+                      {isGoldMember ? "Create Document" : "Start Process"}
                     </Button>
                     <Button
                       variant="secondary"
@@ -732,8 +741,17 @@ export default function TrustDocuments() {
                       className="flex-1"
                       onClick={() => handleDocumentEdit("Declaration of Trust", getLegalTemplate("declaration-of-trust"))}
                     >
-                      <Edit className="h-4 w-4 mr-2" />
-                      Edit Template
+                      {isGoldMember ? (
+                        <>
+                          <Edit className="h-4 w-4 mr-2" />
+                          Edit Template
+                        </>
+                      ) : (
+                        <>
+                          <Lock className="h-4 w-4 mr-2" />
+                          Premium Feature
+                        </>
+                      )}
                     </Button>
                   </CardFooter>
                 </Card>
