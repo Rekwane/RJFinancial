@@ -13,9 +13,10 @@ import * as schema from "@shared/schema";
 import { db } from "./db";
 import jwt from "jsonwebtoken";
 import crypto from "crypto";
+import { Strategy as LocalStrategy } from "passport-local";
 
 // Local strategy setup for regular username/password login
-passport.use('local', new (require('passport-local').Strategy)({
+passport.use('local', new LocalStrategy({
   usernameField: 'email',
   passwordField: 'password'
 }, async (email: string, password: string, done: any) => {
