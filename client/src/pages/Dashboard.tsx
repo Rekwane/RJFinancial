@@ -51,7 +51,7 @@ export default function Dashboard() {
           <div className="md:w-1/3 flex justify-center">
             <div className="relative">
               <img 
-                src="src/assets/dedication_son.png" 
+                src="src/assets/rayjay_dedication.png" 
                 alt="In memory of Rayjay" 
                 className="rounded-lg shadow-md h-64 object-contain"
               />
