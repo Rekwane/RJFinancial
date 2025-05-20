@@ -1107,6 +1107,82 @@ export default function TrustDocuments() {
           </Card>
         </TabsContent>
       </Tabs>
+      
+      {/* Gold Membership Modal */}
+      <Dialog open={showMembershipModal} onOpenChange={setShowMembershipModal}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle className="flex items-center text-amber-600">
+              <Crown className="h-5 w-5 mr-2" />
+              Gold Membership Required
+            </DialogTitle>
+            <DialogDescription>
+              Document editing is a premium feature available exclusively to Gold members.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="p-4 bg-amber-50 rounded-md border border-amber-200">
+            <h4 className="font-medium text-sm mb-2">Gold Membership Benefits:</h4>
+            <ul className="space-y-1 text-sm">
+              <li className="flex items-start">
+                <div className="h-5 w-5 text-amber-600 mr-2 flex-shrink-0">✓</div>
+                <span>Edit and customize all legal document templates</span>
+              </li>
+              <li className="flex items-start">
+                <div className="h-5 w-5 text-amber-600 mr-2 flex-shrink-0">✓</div>
+                <span>Save unlimited custom templates to your account</span>
+              </li>
+              <li className="flex items-start">
+                <div className="h-5 w-5 text-amber-600 mr-2 flex-shrink-0">✓</div>
+                <span>Priority support from our legal document experts</span>
+              </li>
+              <li className="flex items-start">
+                <div className="h-5 w-5 text-amber-600 mr-2 flex-shrink-0">✓</div>
+                <span>Advanced document generation with AI assistance</span>
+              </li>
+            </ul>
+          </div>
+          <DialogFooter className="sm:justify-between">
+            <Button variant="outline" onClick={() => setShowMembershipModal(false)}>
+              Cancel
+            </Button>
+            <Button className="bg-amber-600 hover:bg-amber-700">
+              Upgrade to Gold
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+      
+      {/* Document Editor Modal */}
+      <Dialog open={!!editableDocument} onOpenChange={(open) => !open && setEditableDocument(null)}>
+        <DialogContent className="sm:max-w-[800px] max-h-[90vh] overflow-hidden flex flex-col">
+          <DialogHeader>
+            <DialogTitle className="flex items-center">
+              <Edit className="h-5 w-5 mr-2" />
+              Edit {editableDocument?.type}
+            </DialogTitle>
+            <DialogDescription>
+              Make changes to the document template. This editor allows full customization of the legal text.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="flex-1 overflow-auto min-h-[400px] border rounded-md">
+            <Textarea 
+              className="min-h-[400px] font-mono text-sm p-4 border-0 resize-none outline-none"
+              value={editedContent}
+              onChange={handleDocumentContentChange}
+              placeholder="Document content will appear here for editing."
+            />
+          </div>
+          <DialogFooter className="sm:justify-between mt-4">
+            <Button variant="outline" onClick={() => setEditableDocument(null)}>
+              Cancel
+            </Button>
+            <Button onClick={handleSaveDocument} className="bg-green-600 hover:bg-green-700">
+              <Save className="h-4 w-4 mr-2" />
+              Save Document
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
