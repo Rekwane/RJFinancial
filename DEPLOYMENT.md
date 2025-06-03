@@ -1,4 +1,4 @@
-# RJFinancial Deployment Guide
+# RJWealthGroup Deployment Guide
 
 ## Pre-Deployment Checklist
 
@@ -13,7 +13,7 @@
 - [ ] `SENDGRID_API_KEY` - For email verification (optional)
 
 ### SSL Certificates
-- [ ] SSL certificate files available in `/etc/ssl/rjfinancial` directory
+- [ ] SSL certificate files available in `/etc/ssl/rjwealthgroup` directory
 - [ ] `privkey.pem` - SSL private key file
 - [ ] `fullchain.pem` - SSL certificate chain file
 
@@ -24,8 +24,8 @@
 
 ### Domain Configuration
 - [ ] DNS records point to server IP address
-- [ ] A record: `rjfinancial.com` → Server IP
-- [ ] CNAME record: `www.rjfinancial.com` → `rjfinancial.com`
+- [ ] A record: `rjwealthgroup.com` → Server IP
+- [ ] CNAME record: `www.rjwealthgroup.com` → `rjwealthgroup.com`
 
 ## Deployment Steps
 

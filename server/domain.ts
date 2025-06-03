@@ -4,7 +4,7 @@ import https from 'https';
 import express from 'express';
 import { log } from './vite';
 
-// Domain configuration for RJFinancial.com
+// Domain configuration for RJWealthGroup.com
 export async function configureDomain(app: express.Express) {
   const isProduction = process.env.NODE_ENV === 'production';
   
@@ -33,12 +33,12 @@ export async function configureDomain(app: express.Express) {
       
       // Content Security Policy - restrict resources to come only from specified domains
       res.setHeader('Content-Security-Policy', `
-        default-src 'self' https://*.rjfinancial.com https://*.stripe.com;
-        script-src 'self' https://*.rjfinancial.com https://*.stripe.com 'unsafe-inline';
-        style-src 'self' https://*.rjfinancial.com 'unsafe-inline';
-        img-src 'self' https://*.rjfinancial.com data: https://secure.gravatar.com;
-        font-src 'self' https://*.rjfinancial.com;
-        connect-src 'self' https://*.rjfinancial.com https://*.stripe.com;
+        default-src 'self' https://*.rjwealthgroup.com https://*.stripe.com;
+        script-src 'self' https://*.rjwealthgroup.com https://*.stripe.com 'unsafe-inline';
+        style-src 'self' https://*.rjwealthgroup.com 'unsafe-inline';
+        img-src 'self' https://*.rjwealthgroup.com data: https://secure.gravatar.com;
+        font-src 'self' https://*.rjwealthgroup.com;
+        connect-src 'self' https://*.rjwealthgroup.com https://*.stripe.com;
         frame-src https://*.stripe.com;
         object-src 'none';
       `.replace(/\s+/g, ' ').trim());
@@ -64,7 +64,7 @@ export async function configureDomain(app: express.Express) {
     // Handle custom domain
     app.use((req, res, next) => {
       // Check if the request hostname is the custom domain
-      if (req.hostname === 'rjfinancial.com' || req.hostname.endsWith('.rjfinancial.com')) {
+      if (req.hostname === 'rjwealthgroup.com' || req.hostname.endsWith('.rjwealthgroup.com')) {
         log(`Handling request for custom domain: ${req.hostname}${req.url}`, 'domain');
       }
       next();
@@ -72,7 +72,7 @@ export async function configureDomain(app: express.Express) {
     
     // SSL certificate management
     try {
-      const sslDir = process.env.SSL_DIR || '/etc/ssl/rjfinancial';
+      const sslDir = process.env.SSL_DIR || '/etc/ssl/rjwealthgroup';
       
       if (fs.existsSync(sslDir)) {
         const privateKeyPath = path.join(sslDir, 'privkey.pem');

@@ -1,10 +1,10 @@
 #!/usr/bin/env node
 
 /**
- * RJFinancial Deployment Script
+ * RJWealthGroup Deployment Script
  * 
  * This script handles the final preparation steps for deploying the 
- * RJFinancial website to production.
+ * RJWealthGroup website to production.
  */
 
 const fs = require('fs');
@@ -13,8 +13,8 @@ const { execSync } = require('child_process');
 
 // Configuration
 const config = {
-  appName: "RJFinancial",
-  domain: "rjfinancial.com",
+  appName: "RJWealthGroup",
+  domain: "rjwealthgroup.com",
   environment: process.env.NODE_ENV || 'production',
   port: process.env.PORT || 5000,
   sslEnabled: !!process.env.SSL_DIR,

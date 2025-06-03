@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 
 /**
- * RJFinancial Production Startup Script
+ * RJWealthGroup Production Startup Script
  * 
- * This script manages the startup of the RJFinancial application
+ * This script manages the startup of the RJWealthGroup application
  * in production environments with proper error handling.
  */
 
@@ -13,7 +13,7 @@ const path = require('path');
 
 // Configuration
 const config = JSON.parse(fs.readFileSync('./deploy-config.json', 'utf8'));
-console.log(`Starting ${config.app.name} in ${config.app.environment} mode...`);
+console.log(`Starting RJWealthGroup in ${config.app.environment} mode...`);
 
 // Environment validation
 const requiredEnvVars = [
@@ -77,7 +77,7 @@ if (config.security.sslEnabled) {
 }
 
 // Start the application
-console.log('\n🚀 Starting RJFinancial application...');
+console.log('\n🚀 Starting RJWealthGroup application...');
 try {
   execSync('NODE_ENV=production node dist/index.js', { stdio: 'inherit' });
 } catch (error) {

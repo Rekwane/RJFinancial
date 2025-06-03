@@ -98,7 +98,7 @@ app.use((req, res, next) => {
     host: "0.0.0.0",
     reusePort: true,
   }, () => {
-    log(`RJFinancial server running on port ${port} in ${app.get("env")} mode`);
+    log(`RJWealthGroup server running on port ${port} in ${app.get("env")} mode`);
     log(`Security features: SSL ${process.env.SSL_DIR ? 'enabled' : 'disabled'}, MFA enabled, Stripe integration active`);
   });
 })();
